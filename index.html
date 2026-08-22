@@ -230,7 +230,8 @@ const DAYS=[
  {d:"Thu 17 Sep",r:"Seattle",t:"Family arrives — late",i:[
   {t:"19:45",x:"Delta DL324 departs Boston, Terminal A",n:"✅ BOOKED. PNR [PNR]. Nonstop, 6h15."},
   {t:"23:00",x:"Lands SEA",n:"⚠️ That's 02:00 on their body clock — they've been on Boston time for five days."},
-  {x:"🔴 NO SEATS ASSIGNED — both show '-'",n:"Don't assume Delta fixes it. The US DOT's family-seating dashboard lists which airlines COMMIT to seating an under-13 beside an adult free of charge — Delta isn't one of them; they only 'strive to'. Go into Manage Booking (PNR [PNR]) and choose. If it won't let you, you're on Main Basic — pay the $20–40 upgrade."},
+  {x:"🔴 NO SEATS ASSIGNED — both show '-'",n:"Open Delta My Trips (PNR [PNR]) and try to pick seats. If it lets you → Main Cabin, choose two together, done. If it says 'assigned at check-in' → Basic Economy, and you CANNOT buy your way to Main Cabin afterwards; Delta doesn't sell that upgrade. Then the move is to check in the second the 24-hour window opens: 16 Sep 19:45 Boston = 17 Sep 05:15 India."},
+  {x:"✅ Cabin bag is safe either way",n:"The goibibo voucher says '0 PC / 0 Kgs', which looks alarming but isn't. On Delta US domestic BOTH Basic Economy and Main Cabin include a full carry-on (22×14×9in) plus a personal item — Delta is the exception here; United's Basic Economy is the one that strips it. '0 PC' just means no free CHECKED bag, which is true of every Delta domestic fare. The car seat still flies free."},
   {x:"🔴 The Link plan is dead for this flight — you'll be taking an Uber",n:"The last 2 Line train toward Redmond leaves central Seattle just before midnight. Landing at 23:00 plus bags puts you at the platform ~23:35, and the 1 Line needs ~35 min to reach the transfer. You'd watch it leave. Budget $60–90."},
   {x:"💡 Meet them AT the airport — don't wait at the hotel",n:"Ride the Link down before 23:00. You'll be there for the bags, the car seat and a shattered child, and you all leave together."},
   {x:"🚗 The car seat arrives with them",n:"Your wife checks it from Boston; collect at baggage claim and fit it in the Uber. Fiddly at 23:30 — know how it clips in before you're doing it kerbside."},
@@ -359,7 +360,7 @@ const INFO=[
  {h:"🔴 Before you fly — the three that matter",b:`<ul>
  <li><b>UK visa with the £500 Priority upgrade.</b> Britain scrapped transit-without-visa in Feb 2026. Standard processing returns a decision <b>two days after your flight leaves</b> — the 15-day clock starts at your VFS biometrics appointment, not at submission.</li>
  <li><b>Fix the Emirates seats.</b> 45A/45C and 45K/45H are <b>not adjacent</b> — the 777-300ER is 3-4-3, lettered A·B·C | D·E·F·G | H·J·K, so a stranger sits between your wife and daughter for 13 hours, twice. Free to change in Manage Booking.</li>
- <li><b>Pick the Delta seats.</b> DL324 Boston→Seattle on 17 Sep is booked and confirmed (PNR [PNR]) but <b>both seat numbers show "–"</b>. Don't assume the airline will fix it: the US DOT's family-seating dashboard tracks which carriers <i>commit</i> to seating an under-13 beside an adult for free, and <b>Delta is not one of them</b> — they only "strive to". If Manage Booking won't let you choose, you're on Main Basic; pay the $20–40 upgrade to Main Cabin.</li></ul>`},
+ <li><b>Pick the Delta seats — or find out you can't.</b> DL324 Boston→Seattle on 17 Sep is booked (PNR [PNR]) but <b>both seat numbers show "–"</b>. Open Delta My Trips and try to choose seats. <b>If it lets you, you're on Main Cabin — pick two together and you're done.</b> If it says seats are assigned at check-in, it's <b>Basic Economy</b>. 🔴 <b>Correction to earlier advice: you CANNOT pay to upgrade Basic Economy to Main Cabin after booking</b> — Delta doesn't sell that. If it's Basic, the plan is to check in the instant the 24-hour window opens, not to buy your way out.</li></ul>`},
  {h:"🚗 Car seat",b:`your daughter is <b>16 kg (35 lb)</b> — <b>too light for a booster</b> (they need 40 lb). She needs a <b>5-point harness seat</b>.<br><br>
  <b>Borrow your brother's and have your wife carry it from Boston on 17 Sep.</b> Car seats fly free and don't count against any allowance.<br><br>
  Ask him: is it a harness not a booster? Can he spare it 17–27 Sep? What's the expiry date on the shell?<br><br>
@@ -571,8 +572,9 @@ const INFO=[
  chaat and the sweets instead.`}
 ];
 
+const FXRATE=95.7;
 const COSTS={
- total:7960, office:2157, officeBudget:2500, lean:7075, high:8560, days:23,
+ total:7560, office:2157, officeBudget:2500, lean:6675, high:8160, days:23,
  note:"USD, all three of you. Flights are live-quoted. Excludes international flights (paid) and shopping.",
  seg:[
   {n:"Before you fly",w:"Pre-trip",t:965,p:1,i:[
@@ -586,8 +588,8 @@ const COSTS={
    ["Airport Uber on arrival",65],
    ["Link light rail, the week",60],
    ["Your food, 7 days",370]]},
-  {n:"Family in Seattle",w:"17–18 Sep · your own money",t:603,p:1,i:[
-   ["Flights Boston→Seattle ×2 — Delta DL324 ✅ BOOKED (est., no fare on the confirmation)",528],
+  {n:"Family in Seattle",w:"17–18 Sep · your own money",t:203,p:1,i:[
+   ["Flights Boston→Seattle ×2 — Delta DL324 ✅ BOOKED. ₹40,811 total, but ₹28,567 came off in reward points — this is the ₹12,244 CASH you actually paid",128],
    ["Uber SEA→Redmond, 23:00 arrival — the Link has stopped running by then",75],
    ["(their share of hotel is inside the office week above)",0]]},
   {n:"Seattle sightseeing",w:"17–18 Sep · with the family",t:360,p:1,i:[
@@ -884,7 +886,7 @@ const TIPS=[
   const KEY="tripskip2";
   const skip=store.get(KEY,{});
   const m=n=>"$"+Math.round(n).toLocaleString("en-US");
-  const inr=n=>"₹"+Math.round(n*88/1000)+"k";
+  const inr=n=>"₹"+Math.round(n*FXRATE/1000)+"k";
   const el=document.getElementById("s-cost");
 
   /* Key each skippable line by its CONTENT, not its position.
@@ -1081,7 +1083,7 @@ const TIPS=[
       style="width:100%;padding:12px;font-size:17px;border-radius:9px;
       border:1px solid var(--line);background:var(--card2);color:var(--text)">
     <div id="fxout" class="note" style="margin-top:10px;color:var(--text)"></div>
-    <div class="note" style="margin-top:8px">Rate <input id="rate" type="number" value="88"
+    <div class="note" style="margin-top:8px">Rate <input id="rate" type="number" value="95.7"
       style="width:62px;padding:3px 7px;border-radius:6px;border:1px solid var(--line);
       background:var(--card2);color:var(--text)"> ₹ per $ — change it if the rate moves.</div>
   </div>
@@ -1164,7 +1166,7 @@ const TIPS=[
   const usd=document.getElementById("usd"), rate=document.getElementById("rate"),
         fxout=document.getElementById("fxout");
   const fx=()=>{
-    const v=parseFloat(usd.value), r=parseFloat(rate.value)||88;
+    const v=parseFloat(usd.value), r=parseFloat(rate.value)||FXRATE;
     fxout.innerHTML = (!v||v<=0) ? "" :
       `<div class="big">₹${Math.round(v*r).toLocaleString("en-IN")}</div>`;
   };
