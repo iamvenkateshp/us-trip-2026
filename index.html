@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>US Trip · Sep 2026</title>
+<style>
+  :root{
+    --bg:#0f172a; --card:#1e293b; --card2:#273449; --line:#334155;
+    --text:#e2e8f0; --dim:#94a3b8; --accent:#38bdf8; --warn:#fbbf24;
+    --bad:#f87171; --good:#4ade80; --pad:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  #nearBtn{bottom:calc(16px + env(safe-area-inset-bottom))}
+  main{padding-left:calc(var(--pad) + env(safe-area-inset-left));
+       padding-right:calc(var(--pad) + env(safe-area-inset-right))}
+  header{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.97);
+    border-bottom:1px solid var(--line);padding:10px var(--pad);backdrop-filter:blur(8px)}
+  h1{margin:0;font-size:17px;letter-spacing:.2px}
+  .sub{color:var(--dim);font-size:12px;margin-top:2px}
+  nav{display:flex;gap:6px;overflow-x:auto;padding:8px var(--pad) 0;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav{-webkit-mask-image:linear-gradient(to right,#000 88%,transparent);
+      mask-image:linear-gradient(to right,#000 88%,transparent)}
+  nav button{flex:0 0 auto;background:var(--card);color:var(--dim);border:1px solid var(--line);
+    border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600}
+  nav button.on{background:var(--accent);color:#08131f;border-color:var(--accent)}
+  main{padding:var(--pad)}
+  section{display:none} section.on{display:block}
+  .day{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    margin-bottom:12px;overflow:hidden}
+  .day>summary{padding:12px 14px;font-weight:700;font-size:15px;cursor:pointer;
+    list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .day>summary::-webkit-details-marker{display:none}
+  .day>summary::after{content:"▾";color:var(--dim);font-size:13px;transition:.2s}
+  .day[open]>summary::after{transform:rotate(180deg)}
+  .day .body{padding:0 14px 12px;border-top:1px solid var(--line);padding-top:10px}
+  .when{color:var(--accent);font-size:12px;font-weight:700;display:block;margin-bottom:1px}
+  .item{padding:11px 0;border-bottom:1px dashed var(--line)}
+  .item:last-child{border-bottom:0}
+  .t{color:var(--accent);font-weight:700;font-size:14px;margin-right:7px}
+  .note{color:var(--dim);font-size:14.5px;margin-top:4px}
+  .warn{color:var(--warn)} .bad{color:var(--bad)} .good{color:var(--good)}
+  a.map{display:inline-block;margin-top:6px;background:var(--card2);color:var(--accent);
+    border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12.5px;
+    text-decoration:none;font-weight:600}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px;margin-bottom:11px}
+  .card h3{margin:0 0 7px;font-size:14.5px}
+  .k{color:var(--dim);font-size:13.5px}
+  .big{font-size:19px;font-weight:800}
+  #nearBtn{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:30;
+    background:var(--accent);color:#08131f;border:0;border-radius:999px;
+    padding:13px 24px;font-size:15px;font-weight:800;
+    box-shadow:0 6px 20px rgba(0,0,0,.5)}
+  #nearBtn:disabled{opacity:.6}
+  .dist{color:var(--good);font-weight:800;font-size:12.5px}
+  .empty{color:var(--dim);text-align:center;padding:28px 10px;font-size:14px}
+  ul{margin:6px 0;padding-left:19px} li{margin:5px 0;font-size:14.5px}
+  .pill{display:inline-block;background:var(--card2);border:1px solid var(--line);
+    border-radius:6px;padding:1px 7px;font-size:11.5px;color:var(--dim);margin-right:5px}
+  label.chk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;
+    border-bottom:1px dashed var(--line);font-size:14px;cursor:pointer}
+  label.chk:last-of-type{border-bottom:0}
+  label.chk input{margin-top:3px;width:19px;height:19px;flex:0 0 auto;accent-color:var(--good)}
+  label.chk.on span{color:var(--dim);text-decoration:line-through}
+  label.chk.money{align-items:center}
+  label.chk.money.on b{color:var(--dim);text-decoration:line-through}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .fchip{flex:0 0 auto;background:var(--card);color:var(--dim);border:1px solid var(--line);
+    border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600}
+  .fchip.on{background:var(--accent);color:#08131f;border-color:var(--accent)}
+  #search{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);
+    background:var(--card);color:var(--text);font-size:15px;margin-bottom:11px}
+  .route{background:var(--card2);border:1px solid var(--line);border-radius:10px;
+    padding:11px 13px;margin:8px 0}
+  .route .stop{font-size:14.5px;font-weight:700}
+  .route .leg{color:var(--dim);font-size:13px;margin:3px 0 3px 4px;
+    border-left:2px solid var(--line);padding-left:9px}
+  textarea.dayNote{width:100%;margin-top:10px;min-height:54px;padding:10px;
+    border-radius:9px;border:1px solid var(--line);background:var(--card2);
+    color:var(--text);font-size:14px;font-family:inherit;resize:vertical}
+  .noteWrap{position:relative}
+  .noteFlag{position:absolute;right:10px;bottom:9px;font-size:12px;font-weight:700;
+    opacity:0;transition:opacity .25s;pointer-events:none}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🇺🇸 US Trip · 12 Sep – 6 Oct 2026</h1>
+  <div class="sub">You, your wife and your daughter (4)</div>
+  <nav id="nav"></nav>
+</header>
+
+<main>
+  <section id="s-now" class="on"></section>
+  <section id="s-days"></section>
+  <section id="s-near"><div class="empty">Tap <b>📍 Near me</b> to see what's closest.<br><br>
+    Location is only read when you tap — nothing runs in the background.</div></section>
+  <section id="s-info"></section>
+  <section id="s-cost"></section>
+  <section id="s-check"></section>
+  <section id="s-tools"></section>
+</main>
+
+<button id="nearBtn">📍 Near me</button>
+
+<script>
+/* ---------- DATA ---------- */
+const PLACES=[
+ {n:"SEA — Seattle-Tacoma Airport",a:"17801 International Blvd, Seattle, WA 98158",lat:47.4502,lon:-122.3088,c:"Airport"},
+ {n:"🏢 Microsoft Studio H (your office)",a:"3850 148th Ave NE, Redmond, WA 98052",lat:47.6425,lon:-122.1470,c:"Office"},
+ {n:"Aloft / Element Seattle Redmond (HOTEL)",a:"15220 NE Shen St, Redmond, WA 98052",lat:47.6360,lon:-122.1360,c:"Stay"},
+ {n:"Overlake Village Station (Link 2 Line)",a:"Overlake Village Station, Redmond, WA",lat:47.6355,lon:-122.1355,c:"Transit"},
+ {n:"Sonesta Select Bellevue Redmond (HOTEL alt)",a:"14615 NE 29th Place, Bellevue, WA 98007",lat:47.6320,lon:-122.1420,c:"Stay"},
+ {n:"Redmond Technology Station (Link 2 Line)",a:"Redmond Technology Station, Redmond, WA",lat:47.6446,lon:-122.1386,c:"Transit"},
+ {n:"Downtown Redmond Station (Link 2 Line)",a:"Downtown Redmond Station, Redmond, WA",lat:47.6740,lon:-122.1215,c:"Transit"},
+ {n:"Pike Place Market",a:"85 Pike St, Seattle, WA 98101",lat:47.6097,lon:-122.3422,c:"See"},
+ {n:"Seattle Aquarium",a:"1483 Alaskan Way, Seattle, WA 98101",lat:47.6076,lon:-122.3430,c:"See"},
+ {n:"Space Needle",a:"400 Broad St, Seattle, WA 98109",lat:47.6205,lon:-122.3493,c:"See"},
+ {n:"Chihuly Garden and Glass",a:"305 Harrison St, Seattle, WA 98109",lat:47.6206,lon:-122.3502,c:"See"},
+ {n:"Marymoor Park",a:"6046 W Lake Sammamish Pkwy NE, Redmond, WA",lat:47.6640,lon:-122.1180,c:"See"},
+ {n:"Snoqualmie Falls",a:"6501 Railroad Ave, Snoqualmie, WA 98065",lat:47.5417,lon:-121.8377,c:"See"},
+ {n:"Crossroads Bellevue (food hall)",a:"15600 NE 8th St, Bellevue, WA 98008",lat:47.6182,lon:-122.1290,c:"Food"},
+ {n:"FRIENDS — Lake Stevens WA",a:"Lake Stevens, WA 98258",lat:48.0043,lon:-122.0876,c:"People"},
+ {n:"Boeing Future of Flight, Mukilteo",a:"8415 Paine Field Blvd, Mukilteo, WA 98275",lat:47.9088,lon:-122.2807,c:"See"},
+ {n:"Mukilteo ferry terminal (Whidbey Island)",a:"Mukilteo Ferry Terminal, Mukilteo, WA 98275",lat:47.9490,lon:-122.3040,c:"Transit"},
+ {n:"Historic downtown Snohomish",a:"1st St, Snohomish, WA 98290",lat:47.9129,lon:-122.0982,c:"See"},
+ {n:"Everett waterfront / marina",a:"1728 W Marine View Dr, Everett, WA 98201",lat:47.9950,lon:-122.2260,c:"See"},
+ {n:"Tulalip outlet shopping",a:"10600 Quil Ceda Blvd, Tulalip, WA 98271",lat:48.0870,lon:-122.1830,c:"Shop"},
+ {n:"Dosa House — 100% vegetarian",a:"Redmond, WA",lat:47.6740,lon:-122.1215,c:"Food",q:1},
+ {n:"Chaat House",a:"Bellevue, WA",lat:47.6182,lon:-122.1290,c:"Food",q:1},
+ {n:"Mayuri International Foods (Indian grocery)",a:"2010 148th Ave NE, Redmond, WA",lat:47.6290,lon:-122.1470,c:"Food",q:1},
+ {n:"Bellevue Downtown Park",a:"10201 NE 4th St, Bellevue, WA 98004",lat:47.6119,lon:-122.2015,c:"See"},
+
+ {n:"BUF — Buffalo Niagara Airport",a:"4200 Genesee St, Buffalo, NY 14225",lat:42.9405,lon:-78.7322,c:"Airport"},
+ {n:"Comfort Inn The Pointe (HOTEL)",a:"1 Prospect Pointe, Niagara Falls, NY 14303",lat:43.0870,lon:-79.0620,c:"Stay"},
+ {n:"Prospect Point Observation Tower",a:"Prospect Point, Niagara Falls State Park, NY",lat:43.0828,lon:-79.0687,c:"See"},
+ {n:"Maid of the Mist landing",a:"1 Prospect St, Niagara Falls, NY 14303",lat:43.0840,lon:-79.0665,c:"See"},
+ {n:"Cave of the Winds",a:"Goat Island Rd, Niagara Falls, NY 14303",lat:43.0819,lon:-79.0713,c:"See"},
+ {n:"Goat Island",a:"Goat Island, Niagara Falls State Park, NY",lat:43.0800,lon:-79.0730,c:"See"},
+ {n:"Terrapin Point",a:"Terrapin Point, Goat Island, Niagara Falls, NY",lat:43.0790,lon:-79.0752,c:"See"},
+ {n:"Three Sisters Islands",a:"Three Sisters Islands, Niagara Falls State Park, NY",lat:43.0776,lon:-79.0703,c:"See"},
+ {n:"Luna Island",a:"Luna Island, Niagara Falls State Park, NY",lat:43.0827,lon:-79.0706,c:"See"},
+ {n:"Aquarium of Niagara",a:"701 Whirlpool St, Niagara Falls, NY 14301",lat:43.0930,lon:-79.0592,c:"See"},
+ {n:"Murugan Cafe — in your hotel's building",a:"1 Prospect Pt, Unit 6, Niagara Falls, NY 14303",lat:43.0870,lon:-79.0620,c:"Food"},
+ {n:"Delhi Chaat Corner — pure veg, 08:30–23:00 daily",a:"1 Prospect Pt, Unit 7, Niagara Falls, NY 14303",lat:43.0870,lon:-79.0620,c:"Food"},
+ {n:"Old Falls Street (restaurants)",a:"Old Falls St, Niagara Falls, NY 14303",lat:43.0855,lon:-79.0628,c:"Food"},
+
+ {n:"EWR — Newark Liberty Airport",a:"3 Brewster Rd, Newark, NJ 07114",lat:40.6895,lon:-74.1745,c:"Airport"},
+ {n:"World Center Hotel (HOTEL alt)",a:"144 Washington St, New York, NY 10006",lat:40.7100,lon:-74.0130,c:"Stay"},
+ {n:"Fulton Street Station (13 subway lines nearby)",a:"Fulton St & Broadway, New York, NY 10038",lat:40.7104,lon:-74.0092,c:"Transit"},
+ {n:"Battery Park ferry terminal (Statue of Liberty)",a:"Battery Park, New York, NY 10004",lat:40.7031,lon:-74.0170,c:"See"},
+ {n:"Courtyard Jersey City Newport (HOTEL)",a:"540 Washington Blvd, Jersey City, NJ 07310",lat:40.7276,lon:-74.0348,c:"Stay"},
+ {n:"Newport PATH Station",a:"Newport Centre, Jersey City, NJ 07310",lat:40.7272,lon:-74.0339,c:"Transit"},
+ {n:"Exchange Place PATH Station",a:"Exchange Pl, Jersey City, NJ 07302",lat:40.7163,lon:-74.0334,c:"Transit"},
+ {n:"Journal Square PATH (Indian food)",a:"Journal Square, Jersey City, NJ 07306",lat:40.7329,lon:-74.0632,c:"Food"},
+ {n:"Statue Cruises — Liberty State Park",a:"1 Audrey Zapp Dr, Jersey City, NJ 07305",lat:40.7055,lon:-74.0555,c:"See"},
+ {n:"Statue of Liberty",a:"Liberty Island, New York, NY 10004",lat:40.6892,lon:-74.0445,c:"See"},
+ {n:"Ellis Island",a:"Ellis Island, Jersey City, NJ 07305",lat:40.6995,lon:-74.0397,c:"See"},
+ {n:"9/11 Memorial & Museum",a:"180 Greenwich St, New York, NY 10007",lat:40.7115,lon:-74.0134,c:"See"},
+ {n:"Oculus / WTC Transportation Hub",a:"185 Greenwich St, New York, NY 10007",lat:40.7115,lon:-74.0109,c:"Transit"},
+ {n:"Charging Bull",a:"Bowling Green, New York, NY 10004",lat:40.7056,lon:-74.0134,c:"See"},
+ {n:"Trinity Church",a:"89 Broadway, New York, NY 10006",lat:40.7081,lon:-74.0122,c:"See"},
+ {n:"Brooklyn Bridge — Manhattan entrance",a:"Park Row, New York, NY 10038",lat:40.7127,lon:-74.0040,c:"See"},
+ {n:"Jane's Carousel, DUMBO",a:"Old Dock St, Brooklyn, NY 11201",lat:40.7033,lon:-73.9935,c:"See"},
+ {n:"Washington St photo spot, DUMBO",a:"Washington St & Water St, Brooklyn, NY 11201",lat:40.7037,lon:-73.9895,c:"See"},
+ {n:"American Museum of Natural History",a:"200 Central Park West, New York, NY 10024",lat:40.7813,lon:-73.9740,c:"See"},
+ {n:"Central Park Carousel",a:"1802 65th St Transverse, New York, NY 10065",lat:40.7695,lon:-73.9748,c:"See"},
+ {n:"Bethesda Terrace",a:"Bethesda Terrace, Central Park, New York, NY",lat:40.7740,lon:-73.9709,c:"See"},
+ {n:"Belvedere Castle",a:"Belvedere Castle, Central Park, New York, NY",lat:40.7794,lon:-73.9692,c:"See"},
+ {n:"Times Square",a:"Times Square, New York, NY 10036",lat:40.7580,lon:-73.9855,c:"See"},
+ {n:"Curry Hill (Lexington Ave)",a:"Lexington Ave & E 28th St, New York, NY 10016",lat:40.7433,lon:-73.9829,c:"Food"},
+ {n:"Jackson Heights (Indian food)",a:"74th St & Roosevelt Ave, Jackson Heights, NY 11372",lat:40.7469,lon:-73.8912,c:"Food"},
+ {n:"FRIENDS — Highland Park NJ",a:"Highland Park, NJ 08904",lat:40.4996,lon:-74.4224,c:"People"},
+ {n:"New Brunswick NJ Transit Station",a:"New Brunswick Station, New Brunswick, NJ 08901",lat:40.4963,lon:-74.4463,c:"Transit"},
+ {n:"Oak Tree Road (Indian district)",a:"Oak Tree Rd, Iselin, NJ 08830",lat:40.5726,lon:-74.3221,c:"Food"},
+ {n:"Newark Penn Station",a:"Raymond Plaza W, Newark, NJ 07102",lat:40.7343,lon:-74.1643,c:"Transit"},
+
+ {n:"BOS — Boston Logan Terminal E",a:"Terminal E, Boston Logan Airport, Boston, MA 02128",lat:42.3648,lon:-71.0202,c:"Airport"},
+ {n:"New England Aquarium",a:"1 Central Wharf, Boston, MA 02110",lat:42.3592,lon:-71.0497,c:"See"},
+ {n:"Boston Children's Museum",a:"308 Congress St, Boston, MA 02210",lat:42.3532,lon:-71.0498,c:"See"},
+ {n:"Boston Common",a:"139 Tremont St, Boston, MA 02111",lat:42.3550,lon:-71.0656,c:"See"},
+ {n:"Public Garden (Make Way for Ducklings)",a:"4 Charles St, Boston, MA 02116",lat:42.3541,lon:-71.0704,c:"See"},
+ {n:"Faneuil Hall / Quincy Market",a:"4 S Market St, Boston, MA 02109",lat:42.3600,lon:-71.0546,c:"See"},
+ {n:"Mike's Pastry, North End",a:"300 Hanover St, Boston, MA 02113",lat:42.3646,lon:-71.0545,c:"Food"},
+ {n:"Harvard Yard",a:"Harvard Yard, Cambridge, MA 02138",lat:42.3744,lon:-71.1169,c:"See"},
+ {n:"MIT",a:"77 Massachusetts Ave, Cambridge, MA 02139",lat:42.3592,lon:-71.0937,c:"See"},
+ {n:"Franklin Park Zoo",a:"1 Franklin Park Rd, Boston, MA 02121",lat:42.3028,lon:-71.0880,c:"See"},
+ {n:"Flume Gorge, NH",a:"852 Daniel Webster Hwy, Lincoln, NH 03251",lat:44.0968,lon:-71.6811,c:"See"},
+ {n:"Kancamagus Highway (west end)",a:"Kancamagus Hwy, Lincoln, NH 03251",lat:44.0450,lon:-71.6840,c:"See"},
+ {n:"Settlers Green Outlets (0% tax)",a:"2 Common Ct, North Conway, NH 03860",lat:44.0284,lon:-71.1189,c:"Shop"},
+ {n:"Merrimack Premium Outlets (0% tax)",a:"80 Premium Outlets Blvd, Merrimack, NH 03054",lat:42.8290,lon:-71.5390,c:"Shop"},
+ {n:"Wrentham Village Outlets",a:"1 Premium Outlets Blvd, Wrentham, MA 02093",lat:42.0330,lon:-71.3560,c:"Shop"}
+];
+
+const DAYS=[
+ {d:"Sat 12 Sep",r:"Seattle",t:"Arrival, solo",i:[
+  {t:"18:25",x:"Land SEA on BA49",n:"Immigration + baggage: budget 60–90 min."},
+  {x:"Uber to Redmond, ~$60–75, 35–45 min",n:"After 26 hours of travel, don't attempt the train tonight."},
+  {x:"Eat and sleep",n:"Your body thinks it's 07:00. 🍛 Dosa House in Bellevue is open to 23:59 on Saturdays — the one place that solves a late, jet-lagged Saturday arrival."}]},
+ {d:"Sun 13 Sep",r:"Seattle",t:"Your one free day",i:[
+  {x:"💡 Stay in Seattle — but nowhere near Pike Place",n:"You return with your family on Friday 18th for Pike Place and the Aquarium. Don't do it twice."},
+  {t:"10:50",x:"2 Line into town — sleep in first"},
+  {x:"Pioneer Square, Bill Speidel's Underground Tour, Klondike Gold Rush park"},
+  {x:"Seattle Art Museum",n:"⚠️ SAM is CLOSED Mondays and Tuesdays — Sunday is your only possible slot all week."},
+  {x:"Walk the rebuilt waterfront north to the Olympic Sculpture Park in the evening light"},
+  {x:"Dinner at Uwajimaya, International District",n:"Home about 20:10. The whole day runs to roughly $85."},
+  {x:"🎵 Weezer is at Climate Pledge Arena tonight",n:"Doors 18:00. Last train home leaves Westlake 23:40, reaching Overlake Village 00:17 — comfortable. Your only such option all week."}]},
+ {d:"Mon 14 – Wed 16 Sep",r:"Seattle",t:"Office",i:[
+  {x:"Evenings: Marymoor Park, Bellevue Downtown Park, Crossroads Bellevue"},
+  {x:"Indian food: Dosa House, Chaat House",n:"⚠️ Mayuri (restaurant), Bawarchi, Spice Route and Udupi Palace Bellevue all appear CLOSED despite live listings. Mayuri survives as a grocery."},
+  {x:"📌 Homework: lodge the UK visa Monday; book flights and hotels",n:"See the action list."}]},
+ {d:"Sat 12 – Wed 16 Sep",r:"Boston",t:"👨‍👩‍👧 The family's parallel week",i:[
+  {t:"Sat 14:10",x:"Your wife + daughter land in BOSTON, not Seattle",n:"They stay with your brother until 17 Sep. Five days I'd originally left completely blank."},
+  {x:"🎉 Your brother gets a BONUS weekend, 12–13 Sep",n:"Before he's spent any leave. Save the things that need him for the final week; use this one for gentle family time."},
+  {x:"⚠️ Sunday 13 Sep will be the hard day — schedule nothing",n:"A 9.5-hour shift after 20 hours in transit. Expect a 04:00 wake-up and an early collapse. By Tuesday they'll be close to normal."},
+  {x:"Mon–Wed: local and low-effort",n:"Playground, supermarket, library. Your daughter needs outdoor daylight — it's the fastest jet-lag cure there is."},
+  {x:"🏥 This is the highest-risk window for illness",n:"Small child, maximum jet lag, unfamiliar country. Urgent care ~$250 vs emergency room ~$2,000 for the same sore throat — know which is which BEFORE you need it."}]},
+ {d:"Thu 17 Sep",r:"Seattle",t:"Family arrives — late",i:[
+  {t:"19:45",x:"Delta DL324 departs Boston, Terminal A",n:"✅ BOOKED. PNR [PNR]. Nonstop, 6h15."},
+  {t:"23:00",x:"Lands SEA",n:"⚠️ That's 02:00 on their body clock — they've been on Boston time for five days."},
+  {x:"🔴 NO SEATS ASSIGNED — both show '-'",n:"Don't assume Delta fixes it. The US DOT's family-seating dashboard lists which airlines COMMIT to seating an under-13 beside an adult free of charge — Delta isn't one of them; they only 'strive to'. Go into Manage Booking (PNR [PNR]) and choose. If it won't let you, you're on Main Basic — pay the $20–40 upgrade."},
+  {x:"🔴 The Link plan is dead for this flight — you'll be taking an Uber",n:"The last 2 Line train toward Redmond leaves central Seattle just before midnight. Landing at 23:00 plus bags puts you at the platform ~23:35, and the 1 Line needs ~35 min to reach the transfer. You'd watch it leave. Budget $60–90."},
+  {x:"💡 Meet them AT the airport — don't wait at the hotel",n:"Ride the Link down before 23:00. You'll be there for the bags, the car seat and a shattered child, and you all leave together."},
+  {x:"🚗 The car seat arrives with them",n:"Your wife checks it from Boston; collect at baggage claim and fit it in the Uber. Fiddly at 23:30 — know how it clips in before you're doing it kerbside."},
+  {x:"In bed around 00:30 = 03:30 body clock",n:"Friday morning has been softened to match. Westward is still the easy direction, but not on this little sleep."}]},
+ {d:"Fri 18 Sep",r:"Seattle",t:"Seattle day",pl:["Pike Place Market","Seattle Aquarium","Space Needle","Chihuly Garden"],i:[
+  {x:"⏰ Start at 11:00, not 09:00",n:"They landed at 23:00 last night. Let everyone sleep — a forced early start buys you a meltdown by lunchtime and costs you more than the two hours."},
+  {t:"11:00",x:"Pike Place Market",n:"One direct train, no transfer. Early lunch here."},
+  {x:"Overlook Walk down to the waterfront"},
+  {t:"–15:15",x:"Seattle Aquarium"},
+  {x:"💡 Seattle Center — the free bit nobody tells you about",n:"Same campus as the Space Needle: a free inclusive playground with musical swings, the International Fountain running water-and-music shows 10:00–21:00, and an indoor food hall 07:00–21:00 if it's wet. Budget an hour; she'll like it more than the tower."},
+  {x:"⚠️ The Space Needle bans strollers outright",n:"Plan for that, or skip it — the view is for you, not her."},
+  {x:"Home by ~17:30 — and make it an early night",n:"Saturday is the move to Lake Stevens. Rainy fallback: Snoqualmie Falls, free, 30 min away."}]},
+ {d:"Sat 19 Sep",r:"Friends",t:"To Lake Stevens",i:[
+  {x:"📍 Your friends: Lake Stevens, WA 98258",n:"Snohomish County, north-east of Everett."},
+  {x:"✅ Much closer than I'd assumed — about 1 hour from SEA, 45 min from downtown Seattle",n:"I'd planned around 2–3 hours. Everything about this block is easier than the earlier version said."},
+  {x:"Your friend drives you from Redmond — roughly 40–50 minutes"},
+  {x:"🚗 No rental needed anywhere on this trip"}]},
+ {d:"Sun 20 Sep",r:"Friends",t:"The Mukilteo day",i:[
+  {x:"🛩️ Boeing Gallery + Sky Deck, late morning",n:"🔴 your daughter CANNOT do the factory tour — Boeing requires 4 feet (48in) and she's 41.5. No waiver, no carrying. But the Gallery is a separate cheaper ticket with NO height rule: $14 an adult, under-5s free = $28 for all three. An observation deck over Paine Field's runway."},
+  {x:"If one of you really wants the factory floor",n:"Buy one tour ticket ($42–46) and two gallery tickets, and split up for 80 minutes."},
+  {x:"Mukilteo Lighthouse Park beach"},
+  {x:"⛴️ Walk on the Whidbey Island ferry",n:"20 minutes over, walk straight back. Fare is collected westbound only — about $14 for the family, and your daughter is free. Usually a big hit at four."},
+  {x:"Dinner on the Everett waterfront"},
+  {x:"Only ~65 minutes of your friend's driving across the whole day"}]},
+ {d:"Mon 21 Sep",r:"Friends",t:"The farm day",i:[
+  {x:"🎃 Swans Trail Farms — pumpkins",n:"One of only two farms open on a Monday, and $16.95 rather than $24.95."},
+  {x:"Lunch and antiques in historic downtown Snohomish",n:"11 minutes from the house."},
+  {x:"~45 minutes of driving all day — a deliberately gentle one before the long travel day"},
+  {x:"❌ Skip Leavenworth, Deception Pass and the mountain hikes",n:"Leavenworth's festival is the FOLLOWING weekend and it's 4.5 hours in a car seat. Even 'easy' Heather Lake is 4.6 miles with 1,000 ft of climb."}]},
+ {d:"Tue 22 Sep",r:"Niagara",t:"The day east",i:[
+  {t:"~07:00",x:"Your friend drives you to SEA",n:"⚠️ Leave at 07:00, not 07:30. WSDOT puts Everett→Seattle at 51 min on average but 79 min 'reliable' in the morning peak — and this is a Tuesday. Still far easier than the 2–3 hour drive I'd assumed."},
+  {t:"10:42",x:"United UA2835 Seattle → Chicago O'Hare",n:"✅ Booked answer. 1h15 connection — not the 35 minutes an earlier option had. Both legs are mainline 737s, so all three of you sit in ONE ROW."},
+  {t:"21:07",x:"Land Buffalo",n:"$807 for the three of you — $588 cheaper than the Delta routing I nearly recommended."},
+  {t:"~22:00",x:"Uber to Comfort Inn The Pointe",n:"⚠️ Car seat needed. Uber Car Seat does NOT exist in Buffalo."},
+  {x:"🍛 Dinner is 60 metres away — inside your own hotel building",n:"1 Prospect Pt Units 6 and 7: Murugan Cafe, and Delhi Chaat Corner (pure veg) open 08:30–23:00 EVERY DAY. You'll make it with an hour to spare."}]},
+ {d:"Wed 23 Sep",r:"Niagara",t:"The full day",pl:["Comfort Inn The Pointe","Goat Island","Terrapin Point","Maid of the Mist landing","Murugan Cafe","Cave of the Winds","Prospect Point"],i:[
+  {t:"08:45",x:"Goat Island loop — Luna Island, Terrapin Point, Three Sisters",n:"Free, dry, best views. Dry things first."},
+  {t:"11:15",x:"Maid of the Mist",n:"💡 BUY ONLINE, not at the booth — an online ticket is an undated voucher valid any open day. A booth ticket is only valid that day. Same price. Your daughter free."},
+  {t:"~12:15",x:"Walk 8 min back to the hotel, change into dry clothes"},
+  {t:"13:20",x:"Lunch — pure-veg South Indian, in the hotel complex"},
+  {t:"14:20",x:"NAP — this decides whether fireworks happen"},
+  {t:"16:00",x:"Cave of the Winds",n:"⚠️ PHONE AHEAD — no published minimum age, and nobody could confirm a 4-year-old may use the Hurricane Deck. Adult $23, child $19. No sandals provided; wear shoes you don't mind ruining."},
+  {t:"19:15",x:"Falls Illumination from Prospect Point",n:"Free."},
+  {t:"22:00",x:"Fireworks — decide at 21:40",n:"Nightly. 5 minutes, 9 min from your door. Ask for a gorge-facing room and you may see them from the window."}]},
+ {d:"Thu 24 Sep",r:"Niagara",t:"Morning, then New York",i:[
+  {x:"Slow breakfast (included)"},
+  {t:"09:25",x:"Aquarium of Niagara, ~$18"},
+  {t:"12:25",x:"Uber to BUF"},
+  {x:"Fly BUF → NEWARK",n:"⚠️ NOT United Basic Economy — no cabin bag, which breaks your wife's carry-on-only plan."},
+  {x:"Newark → Jersey City, ~20 min",n:"⚠️ Car seat needed. Uber Car Seat is not reliable in Newark."},
+  {x:"🍼 If your 18-month-old is coming: book 2 nights, not 3",n:"New York punishes you most with two small children. Adding a night later is usually possible; a refund during UNGA week may not be."},
+  {x:"🏨 Also consider the World Center Hotel, 144 Washington St",n:"Manhattan, at the World Trade Center. 13 subway lines, 2 min to the 9/11 Memorial, 10 min to Battery Park, PATH still reaches Newark and your NJ friends. Nearly eliminates the 7 km walking day. See Essentials for the full comparison."}]},
+ {d:"Fri 25 Sep",r:"New York",t:"Liberty, Ground Zero, DUMBO",pl:["Statue Cruises","9/11 Memorial","Oculus","Charging Bull","Trinity Church","Brooklyn Bridge","Jane's Carousel"],i:[
+  {t:"Early",x:"Statue of Liberty + Ellis Island",n:"If in JERSEY CITY: board at Liberty State Park — your side of the river, far shorter queues, round-trip back ~12:30. If at the WORLD CENTER HOTEL: Battery Park is a 10 min walk, but it has the worst queues in the harbour — book the EARLIEST sailing and be there before it opens."},
+  {t:"~13:00",x:"Lunch and a nap at the hotel",n:"The round-trip ferry makes this effortless."},
+  {t:"15:00",x:"PATH to World Trade Center",n:"5 minutes."},
+  {x:"9/11 Memorial pools (free) + the Oculus",n:"300 m apart — barely any walking between them."},
+  {x:"⚠️ Consider skipping the 9/11 MUSEUM itself",n:"Its own teaching material starts at Grades 3–5 — it isn't built for a 4-year-old, and it's emotionally heavy. Saves $66. The outdoor memorial pools are free and are the part worth seeing. Ellis Island is the same call."},
+  {x:"Wall Street, Charging Bull, Trinity Church",n:"✂️ CUT THIS if walking is a problem — it's ~1.5 km for photos of things a small child doesn't care about."},
+  {t:"~17:00",x:"🔄 Subway to DUMBO FIRST — don't walk the bridge yet",n:"Jane's Carousel shuts 17:50 and sunset is 18:46. Carousel, then sunset by the water."},
+  {x:"Walking the bridge BACK is optional",n:"✂️ Skipping it saves 2 km. Subway back instead and you keep the whole day, minus the parts that are for adults."},
+  {x:"📏 On foot: ~7 km as planned, ~3.5 km trimmed",n:"Most of the day is ferry and subway. The WALKING is: the islands ~1 km, memorial to Oculus 0.3 km, the Wall St loop 1.5 km, DUMBO 1 km, the bridge 2 km, plus getting to and from stations. Cutting the Wall St loop and the bridge halves it. A 4-year-old manages 3–4 km across a day with breaks — the failure mode isn't her asking to stop, it's a meltdown at 5pm two miles from the hotel."}]},
+ {d:"Sat 26 Sep",r:"New York",t:"Highland Park, New Jersey",i:[
+  {x:"Friends in Highland Park, NJ"},
+  {x:"By train ~1h15: PATH → Newark Penn → NJ Transit NEC → New Brunswick → 5–10 min taxi",n:"Or let them collect you — 45 min by road."},
+  {x:"🍛 Oak Tree Road is only 6 miles away",n:"One of the largest South Asian districts in North America. 10–15 min drive."},
+  {x:"Optional evening: Times Square after dark",n:"30 minutes is plenty."}]},
+ {d:"Sun 27 Sep",r:"New York",t:"Dinosaurs, then Boston",pl:["American Museum of Natural History","Belvedere Castle","Bethesda Terrace","Central Park Carousel"],i:[
+  {t:"10:00",x:"American Museum of Natural History",n:"The single best thing in New York for a 4-year-old. Your daughter pays ~$22. Allow 2–3 hours."},
+  {x:"Central Park — Belvedere Castle, Bethesda Terrace, the Carousel"},
+  {t:"15:00",x:"Leave for Boston with your brother",n:"~215 miles, 4–4.5h. Leaving at 15:00 gets you in by 19:30–20:00, not 22:30."}]},
+ {d:"Mon 28 Sep",r:"Boston",t:"Rest day — deliberately empty",i:[
+  {x:"Do not schedule anything",n:"You arrived last night after a long drive. Sleep in, unpack."}]},
+ {d:"Tue 29 – Wed 30 Sep",r:"Boston",t:"Boston on foot",pl:["New England Aquarium","Faneuil Hall","Mike's Pastry","Boston Common","Public Garden"],i:[
+  {x:"New England Aquarium",n:"~$110.85 for three — your daughter is 4, so NOT free here."},
+  {x:"Freedom Trail — do the Boston Common → North End half",n:"Cannoli at Mike's Pastry."},
+  {x:"💡 The best $8 of the trip",n:"Read 'Make Way for Ducklings' on the plane, then find the bronze ducklings in the Public Garden — children are meant to climb on them. Then the Greenway Carousel: no horses, 36 harbour creatures drawn by Boston schoolchildren, and because she's under 42 inches a PARENT RIDES FREE. It's on a walk you're already doing."},
+  {x:"⚠️ The Swan Boats close for the season on 7 Sep",n:"They will not be running."},
+  {x:"MBTA $2.40; under-11s ride free"}]},
+ {d:"Thu 1 Oct",r:"Boston",t:"🍂 White Mountains (his leave day 1)",i:[
+  {x:"Kancamagus Highway + Flume Gorge",n:"Your dates sit inside the predicted 1–8 Oct northern peak."},
+  {x:"❌ Skip the Cog Railway",n:"~$230–270, sells out, summit often fogged. The Kancamagus is free and better."},
+  {x:"🛍️ Settlers Green, North Conway — buy electronics here",n:"NH has 0% sales tax. But MA already exempts clothing under $175, so NH only wins on gadgets."},
+  {x:"Day trip, not an overnight",n:"Saturday is your last full day AND your only packing day."}]},
+ {d:"Fri 2 Oct",r:"Boston",t:"Apple orchard (his leave day 2)",i:[
+  {x:"Peak apple season",n:"The recovered leave day — the airport runs fall on a Sunday, so they cost him nothing."}]},
+ {d:"Sat 3 Oct",r:"Boston",t:"Last full day",i:[
+  {x:"Morning: shopping",n:"So it goes straight into the case."},
+  {x:"Afternoon: his family"},
+  {x:"Evening: pack and WEIGH your bags",n:"Don't leave this to Sunday."}]},
+ {d:"Sun 4 Oct",r:"Boston",t:"🛫 Departure day",i:[
+  {t:"~15:15",x:"Run 1 — your brother drops YOU at Logan Terminal E",n:"Be there by 15:45. Sunday 15:00–20:00 is Logan's busiest window."},
+  {t:"16:00–18:30",x:"Your daughter naps AT HOME",n:"Far better than 4 hours in a departures hall."},
+  {t:"~18:45",x:"Run 2 — he takes your wife + daughter, PARKS and walks them in",n:"🔴 You CANNOT help: the Emirates desk opens at 20:05 and your flight leaves at 19:30."},
+  {t:"19:30",x:"BA212 → London Heathrow"},
+  {t:"23:05",x:"EK238 → Dubai",n:"She clears security after 20:00 when queues collapse to 10–15 min."}]},
+ {d:"Mon 5 Oct",r:"Boston",t:"London layover",i:[
+  {x:"~8 hours at Heathrow T5",n:"⚠️ Indian passports can't use eGates — budget ~55 min for immigration, leaving 3–4 usable hours."},
+  {t:"~15:05",x:"BA275 → Hyderabad"}]}
+];
+
+const INFO=[
+ {h:"✈️ Your flights at a glance",b:`<b>Out — Sat 12 Sep</b>
+ <div class="item"><b>You</b> · BA276 Hyderabad 07:45 → London 13:50<br>
+  then BA49 London 16:30 → <b>Seattle 18:25</b></div>
+ <div class="item"><b>Your wife + daughter</b> · EK525 Hyderabad 04:40 → Dubai 06:45<br>
+  then EK237 Dubai 08:20 → <b>Boston 14:10</b></div>
+ <b style="display:block;margin-top:12px">Home — Sun 4 Oct, both from Terminal E</b>
+ <div class="item"><b>You</b> · BA212 <b>Boston 19:30</b> → London · be there <b>15:45</b><br>
+  then BA275 London ~15:05 → Hyderabad, arriving 6 Oct</div>
+ <div class="item"><b>Your wife + daughter</b> · EK238 <b>Boston 23:05</b> → Dubai · be there <b>19:45</b><br>
+  then EK524 Dubai 21:50 → Hyderabad 03:05</div>
+ <div class="note" style="margin-top:10px">🔴 You cannot help at their check-in — the Emirates desk
+ opens at 20:05 and your flight has gone at 19:30. Your brother does that run.</div>`},
+ {h:"🌡️ Weather and what to wear",b:`Typical for your dates — check a forecast the week before.
+ <div class="item"><b>Seattle, mid-Sep</b><span style="float:right">21° / 12°C</span>
+   <div class="note">Mild, grey, showers likely. Waterproof jacket.</div></div>
+ <div class="item"><b>Niagara, late Sep</b><span style="float:right">21° / 11°C</span>
+   <div class="note">You'll be soaked twice by choice. Quick-dry clothes, and shoes you don't mind ruining.</div></div>
+ <div class="item"><b>New York, late Sep</b><span style="float:right">23° / 15°C</span>
+   <div class="note">Warmest of the trip and by far the most walking. Broken-in shoes matter more than anything else you pack.</div></div>
+ <div class="item"><b>Boston, early Oct</b><span style="float:right">19° / 10°C</span>
+   <div class="note">Properly autumnal. Layers.</div></div>
+ <div class="item"><b>White Mountains, 1 Oct</b><span style="float:right">14° / 2°C</span>
+   <div class="note">⚠️ Far colder than Boston — near freezing first thing. Hat and gloves for your daughter.</div></div>`},
+ {h:"🔴 Before you fly — the three that matter",b:`<ul>
+ <li><b>UK visa with the £500 Priority upgrade.</b> Britain scrapped transit-without-visa in Feb 2026. Standard processing returns a decision <b>two days after your flight leaves</b> — the 15-day clock starts at your VFS biometrics appointment, not at submission.</li>
+ <li><b>Fix the Emirates seats.</b> 45A/45C and 45K/45H are <b>not adjacent</b> — the 777-300ER is 3-4-3, lettered A·B·C | D·E·F·G | H·J·K, so a stranger sits between your wife and daughter for 13 hours, twice. Free to change in Manage Booking.</li>
+ <li><b>Pick the Delta seats.</b> DL324 Boston→Seattle on 17 Sep is booked and confirmed (PNR [PNR]) but <b>both seat numbers show "–"</b>. Don't assume the airline will fix it: the US DOT's family-seating dashboard tracks which carriers <i>commit</i> to seating an under-13 beside an adult for free, and <b>Delta is not one of them</b> — they only "strive to". If Manage Booking won't let you choose, you're on Main Basic; pay the $20–40 upgrade to Main Cabin.</li></ul>`},
+ {h:"🚗 Car seat",b:`your daughter is <b>16 kg (35 lb)</b> — <b>too light for a booster</b> (they need 40 lb). She needs a <b>5-point harness seat</b>.<br><br>
+ <b>Borrow your brother's and have your wife carry it from Boston on 17 Sep.</b> Car seats fly free and don't count against any allowance.<br><br>
+ Ask him: is it a harness not a booster? Can he spare it 17–27 Sep? What's the expiry date on the shell?<br><br>
+ <span class="bad">Uber Car Seat does NOT exist in Buffalo and isn't reliable in Newark</span> — exactly the rides you need it for. If a car turns up without a seat, don't get in; use a licensed taxi.`},
+ {h:"🧳 Baggage",b:`<b>You:</b> BA Premium Economy = 2 × 23 kg checked + cabin bag + personal item. Carrying one 23 kg case throughout leaves a whole allowance free for the way home.<br><br>
+ <b>Your wife:</b> 4 × 23 kg dropped in Boston on 12 Sep, then cabin-only for all three domestic flights.<br><br>
+ Total bag fees ≈ <b>$80</b>, not the $300–450 I first budgeted.<br><br>
+ <span class="bad">One risk: United Basic Economy on Buffalo → Newark has NO cabin bag.</span> Buy a fare above it or her whole plan collapses.`},
+ {h:"💳 Money and tipping",b:`<ul>
+ <li>Always choose to be charged in <b>USD</b>, never INR — dynamic currency conversion is a bad rate.</li>
+ <li><b>Fuel pumps ask for a US ZIP code</b> and will reject your card. Pay the cashier inside.</li>
+ <li>Restaurants 18–20% · taxis/Uber 15–18% · housekeeping $3–5/night · <b>counter service: no tip needed</b>, "no tip" on the screen is fine.</li>
+ <li>Sales tax is added at the till, not on the shelf price.</li></ul>`},
+ {h:"🚈 Getting around",b:`<b>Seattle:</b> Link 2 Line, flat $3, your daughter free (WA: under-18s free). Opened March 2026 — you do not need a car.<br><br>
+ <b>New York:</b> tap a contactless card, buy nothing. Subway $3.00 capped at $35/week; PATH $3.25 and does <b>not</b> cap. They cap separately. MetroCard was retired in Jan 2026. <span class="good">your daughter rides free — at 41.5" she's under the 44" limit.</span><br><br>
+ <b>Boston:</b> MBTA $2.40, under-11s free.<br><br>
+ <b class="bad">Never take a car or cab in Manhattan during UNGA week.</b>`},
+ {h:"🏥 If someone falls ill — read this before you need it",b:`
+ <div class="item"><b>Urgent care, NOT the emergency room</b>
+ <div class="note">The same sore throat costs about <b>$250 at an urgent care</b> and about
+ <b>$2,000 in an ER</b> — roughly ten times more. This is the most expensive decision an Indian
+ family makes in America, and it comes up far more often than a real emergency does.</div></div>
+ <div class="item"><b>Emergency room</b><div class="note">Genuine emergencies only — breathing
+ difficulty, serious injury, a fit. Otherwise you're paying ten times over.</div></div>
+ <div class="item"><b>Retail clinic</b> (CVS MinuteClinic, Walgreens)
+ <div class="note">Cheapest, for minor things.</div></div>
+ <div class="note" style="margin-top:10px">Named clinics and paediatric ERs for every base are in
+ <b>18-MEDICAL.md</b> — in your private repo, <i>github.com/iamyoup/us-trip-2026-private</i>
+ (sign in to view). ⚠️ No 24-hour pharmacy could be verified anywhere on this trip — Seattle's
+ traditional 24-hour chain closed in 2025. Don't count on one at 2am.</div>
+ <div class="note" style="margin-top:8px">🔴 <b>"Benadryl" is not what you think.</b> In India it's a
+ cough syrup. In America every single product with that name is a <b>sedating antihistamine</b> —
+ checked across all 32 US products. Giving it to your daughter for a cough would be a mistake.</div>
+ <div class="note" style="margin-top:8px">Indian travel insurance is usually <b>reimbursement-based</b>:
+ you pay first and claim later. Keep the itemised bill, the medical report and every receipt.</div>`},
+ {h:"🍱 Food, sleep and tantrums — for your wife",b:`
+ <b>Food on the flight — carry as much as you need.</b> Baby food, milk, formula and toddler drinks
+ are <b>exempt from the 100 ml liquid rule</b> in India, Dubai and the US. Declare them at security
+ rather than letting them be found. Ice packs allowed. Request a <b>baby meal AND a child meal</b> in
+ Manage Booking 24–48h ahead — Emirates also warms bottles and provides sterilised water.<br><br>
+ 🔴 <b>The trap:</b> whatever food is left when you land in Boston <b>must be declared</b>. The fine
+ for not declaring is <b>$300 first offence — even for food that would have been allowed.</b> The
+ offence is the silence, not the food. Tick "yes", let them glance in the bag, walk on.<br><br>
+ <b>So: pack homemade food to eat on the plane, sealed commercial packets for anything you want to
+ still have in America.</b> Meat, fresh fruit and veg, and fresh dairy will be taken. Sealed dry
+ snacks, spices, dal and baby food are fine.<br><br>
+ <b>Once there it's easy.</b> Mayuri has two shops in Redmond; Patel Brothers is in Waltham near
+ Boston. US supermarkets have huge baby-food aisles. Your Seattle hotel has a kitchen for the whole
+ first week.<br><br>
+ <b>😴 Sleep — 12.5 hours of shift, about 4–5 days to adjust.</b> Expect 2–4 a.m. wakefulness for the
+ first two or three nights. The plan absorbs it: you land in Boston and stay put for five days with
+ family and nothing scheduled. Morning daylight helps more than anything else. Hold the local bedtime
+ from night one. Don't engage at 3 a.m. — low light, quiet, no play.<br><br>
+ <b>Her nap is already protected</b> — the 14:20 slot at Niagara works for both girls. Keep the
+ pattern everywhere: the one thing that matters in the morning, back to the room at ~13:00, something
+ low-stakes late afternoon, nothing ambitious in the evening. <b>Stroller naps count.</b><br><br>
+ ⚠️ <b>Reserve a cot at both hotels when you book</b> — free, but limited. Bring her own blanket;
+ smell matters more than comfort at this age.<br><br>
+ <b>😤 Tantrums — four causes, all predictable.</b> Hunger (feed on a schedule, before the meltdown),
+ tiredness, being strapped in more than ~90 minutes, and over-stimulation. Distraction beats
+ reasoning — she genuinely can't be reasoned with yet. Get low, hold her, or leave the space for 90
+ seconds. Agree in advance who takes the next one.<br><br>
+ <b>The danger points on this trip:</b> the Dubai transfer, Boston immigration at hour 20 (keep one
+ new toy sealed for exactly that queue), the 21:07 Buffalo landing, and the 7 km New York day —
+ which is the day to split up rather than all suffer together.`},
+ {h:"🍼 Bringing your 18-month-old?",b:`
+ <b>My recommendation: bring her.</b> The flight is one hard day; the separation is twenty-three, at
+ the age when separation is hardest. And <b>15 of your 23 days are in family homes or a single
+ hotel</b> with other adults around — the trip is friendlier than it looks.<br><br>
+ <b>The honest counter-argument:</b> your wife would fly Hyderabad→Dubai→Boston <b>alone with a
+ 4-year-old and an infant in arms</b> — ~20 hours plus a Dubai transfer and US immigration. That's
+ the real cost, and it's reason enough to decide the other way.<br><br>
+ <b>Four things to do now if she comes</b>
+ <div class="item"><b>📅 Check her exact date of birth</b>
+ <div class="note">If she turns 2 during the trip, the return needs a <b>paid seat at child fare</b>
+ — and Emirates' website can't process that mixed booking. You'd have to ring them.</div></div>
+ <div class="item"><b>🍼 Request a bassinet</b>
+ <div class="note">11 kg limit; an average 18-month-old is 10–11 kg, so it's borderline. Limited and
+ first-come. If she fits, it transforms the flight.</div></div>
+ <div class="item"><b>✈️ The seat fix becomes urgent</b>
+ <div class="note">Your wife must hold the baby <i>and</i> sit beside your daughter. A stranger
+ between them is untenable with two children.</div></div>
+ <div class="item"><b>👵 Could her grandmother come?</b>
+ <div class="note">If she has a visa, this solves the 20-hour flight outright and gives you a
+ babysitter in New York. The highest-leverage change available.</div></div>
+ <b>Cost is not the obstacle — about $250–350 all in.</b> US domestic lap infants fly <b>free</b>
+ (verified, Delta and United). Emirates charges ~10% of the adult fare. Attractions are free at that
+ age; hotel cots are free but must be reserved.<br><br>
+ <b>The change I'd make:</b> cut New York from three nights to two, or drop it. A 7 km walking day,
+ only a third of subway stations have lifts, and $475 a night for the days you'd enjoy least.`},
+ {h:"🔴 Book the hotel BEFORE the ferry",b:`
+ <b>The Statue of Liberty ticket is not interchangeable between departure points.</b> You choose
+ New York or New Jersey when you buy it, and <b>you must board there.</b> Get this the wrong way
+ round and you're on the wrong side of the Hudson with a non-transferable ticket.<br><br>
+ <b>So decide the hotel first, then match the ferry:</b>
+ <div class="item"><b>Courtyard Jersey City</b> → book <b>New Jersey (Liberty State Park)</b>
+ <div class="note">1 Audrey Zapp Dr. Your own side of the river, and it saves 60–90 minutes of
+ queueing.</div></div>
+ <div class="item"><b>World Center Hotel</b> → book <b>New York (Battery Park)</b>
+ <div class="note">A 10-minute walk from the hotel — but it's the worst queue in the harbour, so take
+ the <b>earliest sailing</b> and arrive before it opens.</div></div>
+ <div class="note" style="margin-top:8px">Either way: <b>statuecitycruises.com</b> only — it's the
+ sole authorised operator. $26 adult, $17 child 4–12, family of three $69. Free cancellation 24h+.
+ <b>Crown is out</b> (42-inch minimum, 162 unaided steps); ask for <b>Pedestal</b> instead.</div>`},
+ {h:"🏨 World Center Hotel vs Jersey City",b:`
+ <b>144 Washington St is a genuinely strong option — quite possibly better than my Jersey City
+ recommendation, especially if both children come.</b><br><br>
+ <b>Why it's good</b><br>
+ · <b>13 subway lines within a short walk</b> — 1, 2, 3, 4, 5, A, C, E, J, Z, R, W via Fulton Street
+ and the Oculus. One of the best-connected spots in the city.<br>
+ · <b>2 minutes from the 9/11 Memorial</b>, which is already on your Friday.<br>
+ · <b>10 minutes from Battery Park</b> and the Statue of Liberty ferry.<br>
+ · <b>PATH runs from the Oculus</b> to Jersey City <i>and</i> Newark — so your New Jersey friends and
+ the Newark airport transfer both still work.<br>
+ · Rooms are reported as <b>larger than typical New York</b>, some with kitchenettes, and family
+ rooms with two queens. With small children that matters more than it sounds.<br><br>
+ 🔴 <b>The big win: it nearly solves the 7 km walking day.</b> Staying at the World Trade Center means
+ the ferry, the memorial, the Oculus and your hotel are all within about a kilometre of each other.
+ No river crossing at the start and end of every day, and you can go back to the room for a nap
+ whenever you need to — which with a toddler is the whole game.<br><br>
+ <b>What you'd give up</b><br>
+ · ⚠️ <b>The Liberty State Park ferry trick.</b> That was my main reason for Jersey City — shorter
+ queues on your own side of the river. From Manhattan you'd use <b>Battery Park instead, which has
+ the worst queues in the harbour.</b> Mitigate it: book the <b>earliest sailing</b> and be there
+ before it opens. Worth doing anyway with children.<br>
+ · Journal Square's Indian food is no longer on your doorstep — but Curry Hill is a direct subway
+ ride.<br>
+ · The Financial District is <b>quiet at night and at weekends</b> — it's an office area. Fewer
+ restaurants open late. With young children, probably a feature rather than a bug.<br><br>
+ ✅ <b>UNGA is not a problem here.</b> The security zone is Midtown East, 42nd–48th St — about 6 km
+ north. You're well clear of it.<br><br>
+ <b>My verdict: take it if the price is within about $50/night of the Courtyard's $475.</b> Check the
+ rate for 24–27 Sep before committing. Earlier research found Lower Manhattan competitive with Jersey
+ City during UNGA week — the Fairfield Financial District came in at $467, cheaper than every Jersey
+ City option.`},
+ {h:"👶 Stroller for a 4-year-old? — it depends on the toddler",b:`
+ <b>The honest answer changes completely depending on whether your 18-month-old comes.</b><br><br>
+ <b>🅰️ If only your 4-year-old comes — yes, take one, but you'll use it on two days.</b><br>
+ A typical 4-year-old walks 1–2 km happily and 3–4 km across a whole day with breaks.
+ <b>The New York Friday is 7 km.</b> That's well beyond her, and the failure mode isn't her asking to
+ stop — it's a meltdown at 5 p.m. two miles from the hotel.<br><br>
+ But its real value at four isn't transport. It's <b>somewhere to nap, a bag trolley, and a place to
+ put her the moment a queue appears.</b> Take a light umbrella fold, use it in New York and at
+ Niagara, and leave it in the room the rest of the time.<br><br>
+ ⚠️ <b>Check the weight rating before you buy.</b> She's 16 kg and many cheap umbrella strollers stop
+ at 15–18 kg. You want one rated <b>20 kg or more</b> that stands up folded.<br><br>
+ <b>🅱️ If both children come — the stroller goes to the baby, and that changes the plan, not the
+ pushchair.</b><br>
+ You cannot push two. A double or sit-and-stand is heavy, wide, and miserable on subway stairs — and
+ only about a third of New York stations have a lift. <b>Don't solve this with equipment. Solve it by
+ walking less.</b><br><br>
+ <b>How to cut the New York Friday from 7 km to about 4</b>
+ <div class="item"><b>Keep</b> the Statue of Liberty ferry — it's a boat, there's no walking, and it's
+ the best thing you'll do that day</div>
+ <div class="item"><b>Keep</b> the 9/11 memorial pools and the Oculus — they're next to each other,
+ barely 300 m apart</div>
+ <div class="item"><b>Cut</b> the Wall Street / Charging Bull / Trinity Church loop — about 1.5 km of
+ walking for photographs of things a child doesn't care about</div>
+ <div class="item"><b>Cut the Brooklyn Bridge crossing.</b> Take the subway to DUMBO, do the carousel
+ and the sunset, and subway back. You keep the view and lose 2 km</div>
+ <div class="note" style="margin-top:8px">Most of that day is ferry and subway — the <b>walking</b>
+ is the islands (~1 km), memorial to Oculus (0.3), the Wall St loop (1.5), DUMBO (1) and the bridge
+ (2), plus getting to and from stations. Cutting the last two roughly halves it, to about 3.5 km.
+ That's the whole day still intact, minus the parts that are for adults.</div><br>
+ <b>Where a stroller won't help either way</b><br>
+ · 🔴 The <b>Space Needle bans them outright</b><br>
+ · <b>Cave of the Winds</b> — wooden decks and stairs<br>
+ · <b>Maid of the Mist</b> — fold it for the boat<br>
+ · <b>New York subway stairs</b> — budget for carrying it, whatever you choose<br><br>
+ ✅ It <b>gate-checks free</b> on every US airline, right at the aircraft door, and doesn't count
+ against your baggage allowance.`},
+ {h:"🚸 Two risks that are genuinely different here",b:`
+ <b>Traffic comes from the LEFT.</b> Thirty years of looking right first is the reflex that gets
+ Indian visitors hurt. Hold your daughter's hand at every kerb without exception.<br><br>
+ <b>A car may legally cross your pedestrian signal.</b> Right-turn-on-red is permitted almost
+ everywhere in the US — a driver turning right can legally move while your walk signal is green.
+ Make eye contact with the driver before you step out.<br><br>
+ <b>Ticks</b> in the White Mountains and rural New England in early October. Check her hairline,
+ behind the ears and the backs of the knees after the 1 Oct foliage day.`},
+ {h:"📞 Emergencies",b:`<a class="map" style="display:block;text-align:center;font-size:17px;padding:12px"
+   href="tel:911">📞 Call 911 — police, fire, ambulance</a>
+ <div class="note" style="margin-top:10px;color:var(--text)">
+ <b>Niagara hotel</b> — <a href="tel:+17164025350" style="color:var(--accent)">+1 716 402 5350</a>
+ (phone ahead about your late arrival on 22 Sep)</div>
+ <div class="note" style="margin-top:8px">Indian Consulate General in <b>New York</b> and <b>Seattle</b>;
+ Embassy in Washington DC. Addresses are in <b>13-PRACTICALITIES.md</b> in your private repo —
+ I've deliberately not copied the phone numbers here because I could only single-source them.</div>
+ <div class="note" style="margin-top:8px"><b>Booking references and the full research files:</b>
+ <i>github.com/iamyoup/us-trip-2026-private</i> — private, sign in to read. Deliberately not on
+ this page, which is public.</div>`},
+ {h:"🍽️ Food notes",b:`Veg and non-veg both fine, so treat every restaurant list as a floor not a ceiling.<br><br>
+ 🥇 <b>Niagara — the best logistical find of the trip.</b> Your hotel's own building holds three South
+ Asian restaurants. <b>Murugan Cafe</b> (Unit 6) and <b>Delhi Chaat Corner</b> (Unit 7, pure veg,
+ <b>open 08:30–23:00 every day</b>) are about 60 metres from the lobby — not the 8-minute walk I first
+ said. That covers a late arrival, breakfast, and veg-only days without leaving the building.<br><br>
+ <b>Seattle:</b> Dosa House (Bellevue) is open to <b>23:59 on Saturdays</b> — you land 18:25 on a
+ Saturday. <b>Jack's BBQ opens 07:00</b> on weekdays, the only real answer to a 04:00 jet-lag wake-up.
+ <span class="warn">Mayuri the restaurant is closed; Mayuri the grocery chain is thriving — two stores
+ in Redmond.</span><br><br>
+ <b>New York:</b> Curry Hill (Lexington & 28th), Jackson Heights (cheaper and better), Journal Square
+ in Jersey City.<br>
+ <b>Boston suburbs:</b> Patel Brothers at <b>425 Moody Street, Waltham</b> sits on the same block as
+ the two best Indian restaurants in the suburbs. <b>Crystal Spoons</b> (Hyderabadi) is
+ <b>reservation-only for dinner</b>; lunch is walk-in.<br><br>
+ ⚠️ <b>Clam chowder is built on pork fat</b> — ask every time. In the US "vegetarian" can still include
+ egg, and soups often use chicken or beef stock.<br><br>
+ 💡 Honest verdict: in early October the New England food worth your money is <b>apple cider donuts</b>,
+ not a $35 lobster roll. And Oak Tree Road biryani won't satisfy a Hyderabad family — go for the
+ chaat and the sweets instead.`}
+];
+
+const COSTS={
+ total:7960, office:2157, officeBudget:2500, lean:7075, high:8560, days:23,
+ note:"USD, all three of you. Flights are live-quoted. Excludes international flights (paid) and shopping.",
+ seg:[
+  {n:"Before you fly",w:"Pre-trip",t:965,p:1,i:[
+   ["UK Standard Visitor visa (£135)",175,"visa"],
+   ["UK Priority processing (£500) — not optional",650,"visa"],
+   ["VFS service charge",28],
+   ["Travel insurance ×3",95],
+   ["International Driving Permit",17]]},
+  {n:"Seattle office week",w:"12–19 Sep · 7 nights · OFFICE BUDGET",t:2157,p:0,i:[
+   ["Hotel — Element, 7 nights @ ~$237",1662],
+   ["Airport Uber on arrival",65],
+   ["Link light rail, the week",60],
+   ["Your food, 7 days",370]]},
+  {n:"Family in Seattle",w:"17–18 Sep · your own money",t:603,p:1,i:[
+   ["Flights Boston→Seattle ×2 — Delta DL324 ✅ BOOKED (est., no fare on the confirmation)",528],
+   ["Uber SEA→Redmond, 23:00 arrival — the Link has stopped running by then",75],
+   ["(their share of hotel is inside the office week above)",0]]},
+  {n:"Seattle sightseeing",w:"17–18 Sep · with the family",t:360,p:1,i:[
+   ["Seattle Aquarium ×3",100],
+   ["Space Needle + Chihuly ×2",150],
+   ["Extra food for two more people",110]]},
+  {n:"Your friends near Seattle",w:"19–21 Sep · 3 nights",t:120,p:1,i:[
+   ["Car rental — NOT NEEDED, your friend drives you",0],
+   ["Accommodation — staying with friends",0],
+   ["Food — mostly hosted",120]]},
+  {n:"Niagara Falls",w:"22–24 Sep · 2 nights",t:1804,p:1,i:[
+   ["Flights Seattle→Buffalo ×3 — United via Chicago",807],
+   ["Checked bag ×1 (yours)",45],
+   ["Comfort Inn The Pointe, 2 nights",388],
+   ["Uber Buffalo→hotel",85],
+   ["Uber hotel→Buffalo airport",60],
+   ["Maid of the Mist ×2 — buy ONLINE (undated voucher)",61],
+   ["Cave of the Winds ×2 + child",65],
+   ["Aquarium of Niagara ×3",68],
+   ["Niagara Scenic Trolley wristbands",10],
+   ["Food ×3, 2.5 days",215]]},
+  {n:"New York",w:"24–27 Sep · 3 nights",t:3279,p:1,i:[
+   ["Flights Buffalo→Newark ×3 — United UA4403",1107],
+   ["Checked bag ×1",45],
+   ["Courtyard Jersey City, 3 nights",1426],
+   ["Newark → Jersey City transfer",60],
+   ["PATH + subway, 3 days",70],
+   ["Statue of Liberty ferry ×3",69],
+   ["Nat History Museum ×3 — General Admission",72],
+   ["SUMMIT One Vanderbilt ×2",100],
+   ["Food ×3, 3.5 days",330]]},
+  {n:"Boston + New England",w:"27 Sep – 4 Oct · 7 nights",t:829,p:1,i:[
+   ["Accommodation — your brother's",0],
+   ["MBTA",60],
+   ["Fuel contribution for road trips",90],
+   ["New England Aquarium ×3",111],
+   ["Boston Children's Museum ×3",72],
+   ["Flume Gorge ×2 (under-5s free)",36],
+   ["Apple orchard + odds and ends",60],
+   ["Food ×3, 8 days — mostly home cooking",400]]}],
+ cat:[["New York",2704],["Niagara Falls",1744],["Visa + insurance",965],
+      ["Boston + New England",829],["Family flights + Seattle",720],["Friends",120]],
+ lever:[["Book the three domestic flights this week, not September","300–600"],
+        ["Skip SUMMIT and one museum",200],
+        ["Eat in more during the Boston week",300],
+        ["Shop in New Hampshire, not Massachusetts","125 per $2,000"],
+        ["Your friend driving instead of a rental","575 — already saved"],
+        ["One suitcase left at your brother's","220 — already saved"]]
+};
+
+const TABS=[["s-now","Today"],["s-days","All days"],["s-near","Near me"],["s-check","Checklist"],["s-cost","Money"],["s-tools","Tools"],["s-info","Essentials"]];
+const nav=document.getElementById("nav");
+TABS.forEach(([id,label],ix)=>{
+  const b=document.createElement("button");
+  b.textContent=label; b.dataset.t=id; if(ix===0)b.className="on";
+  b.onclick=()=>{
+    document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));
+    document.querySelectorAll("section").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); document.getElementById(id).classList.add("on");
+    window.scrollTo(0,0);
+  };
+  nav.appendChild(b);
+});
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* Storage that cannot take the app down.
+   Private mode throws on write; a corrupt value would throw on parse. Either
+   would abort the whole script, because this is a single <script> block. */
+const store={
+  get(key,fallback){
+    try{
+      const raw=localStorage.getItem(key);
+      if(raw==null) return fallback;
+      const val=JSON.parse(raw);
+      if(val===null||typeof val!==typeof fallback) return fallback;
+      if(Array.isArray(fallback)!==Array.isArray(val)) return fallback;
+      return val;
+    }catch(e){
+      try{ localStorage.removeItem(key); }catch(_){}
+      return fallback;
+    }
+  },
+  set(key,val){
+    try{ localStorage.setItem(key,JSON.stringify(val)); return true; }
+    catch(e){ return false; }
+  },
+  drop(key){ try{ localStorage.removeItem(key); }catch(e){} }
+};
+const mapURL=p=>"https://www.google.com/maps/search/?api=1&query="+
+  encodeURIComponent(p.q?(p.n.split(" — ")[0]+", "+p.a):(p.a||p.n));
+
+function placesFor(d){
+  if(!d.pl) return [];
+  return d.pl.map(n=>PLACES.find(p=>p.n.toLowerCase().includes(n.toLowerCase()))).filter(Boolean);
+}
+function routeURL(ps){
+  if(ps.length<2) return null;
+  const q=p=>encodeURIComponent(p.q?(p.n.split(" — ")[0]+", "+p.a):(p.a||p.n));
+  const mid=ps.slice(1,-1).map(q).join("%7C");
+  return "https://www.google.com/maps/dir/?api=1&origin="+q(ps[0])+
+    "&destination="+q(ps[ps.length-1])+(mid?"&waypoints="+mid:"")+"&travelmode=walking";
+}
+function legsHTML(ps){
+  if(ps.length<2) return "";
+  let out="",total=0;
+  for(let i=1;i<ps.length;i++){
+    const km=haversine(ps[i-1].lat,ps[i-1].lon,ps[i].lat,ps[i].lon); total+=km;
+    const mins=Math.round(km/5*60);
+    out+=`<div class="leg">↓ ${km<1?Math.round(km*1000)+" m":km.toFixed(1)+" km"} · ~${mins} min walk</div>
+      <div class="stop">${esc(ps[i].n)}</div>`;
+  }
+  return `<div class="route"><div class="stop">${esc(ps[0].n)}</div>${out}
+    <div class="note" style="margin-top:7px">Total ${total.toFixed(1)} km on foot.
+    Straight-line estimate — real walking is a bit further.</div></div>`;
+}
+
+function dayHTML(d,open){
+  const items=d.i.map(it=>`<div class="item">
+    ${it.t?`<span class="t">${esc(it.t)}</span>`:""}<b>${esc(it.x)}</b>
+    ${it.n?`<div class="note">${esc(it.n)}</div>`:""}</div>`).join("");
+  const ps=placesFor(d), url=routeURL(ps);
+  const route=url?`<a class="map" style="display:block;text-align:center;margin:10px 0 4px"
+      href="${url}" target="_blank" rel="noopener">🗺️ Open today's route in Maps</a>`+legsHTML(ps):"";
+  const noteBox=`<div class="noteWrap">
+      <textarea class="dayNote" data-d="${esc(d.d)}"
+        placeholder="Your notes for this day — saved automatically on this device"></textarea>
+      <span class="noteFlag" id="nf-${esc(d.d.replace(/[^a-z0-9]/gi,""))}"></span></div>`;
+  return `<details class="day"${open?" open":""}>
+    <summary><span><span class="when">${esc(d.r)}</span>${esc(d.d)} · ${esc(d.t)}</span></summary>
+    <div class="body">${items}${route}${noteBox}</div></details>`;
+}
+
+/* day notes persist locally */
+function wireNotes(root){
+  const KEY="tripnotes";
+  (root||document).querySelectorAll("textarea.dayNote").forEach(t=>{
+    const day=t.dataset.d;
+    t.value=(store.get(KEY,{})[day])||"";
+    let timer=null;
+    t.addEventListener("input",()=>{
+      /* read fresh each time — a captured snapshot lets two textareas for the
+         same day overwrite each other with stale copies */
+      const notes=store.get(KEY,{});
+      notes[day]=t.value;
+      const ok=store.set(KEY,notes);
+      document.querySelectorAll("textarea.dayNote").forEach(o=>{
+        if(o!==t&&o.dataset.d===day) o.value=t.value;
+      });
+      const flag=document.getElementById("nf-"+day.replace(/[^a-z0-9]/gi,""));
+      if(flag){
+        flag.textContent=ok?"Saved ✓":"⚠️ Couldn't save — private browsing blocks it";
+        flag.style.color=ok?"var(--good)":"var(--bad)";
+        flag.style.opacity="1";
+        clearTimeout(timer);
+        timer=setTimeout(()=>{ flag.style.opacity="0"; },1800);
+      }
+    });
+  });
+}
+
+document.getElementById("s-days").innerHTML=
+  `<input id="search" type="search" placeholder="Search the whole trip — try 'ferry' or 'car seat'">
+   <div id="dayList">${DAYS.map(d=>dayHTML(d,false)).join("")}</div>`;
+wireNotes(document.getElementById("s-days"));
+
+(function(){
+  const box=document.getElementById("search"), list=document.getElementById("dayList");
+  if(!box) return;
+  box.addEventListener("input",()=>{
+    const q=box.value.trim().toLowerCase();
+    if(!q){ list.innerHTML=DAYS.map(d=>dayHTML(d,false)).join(""); wireNotes(list); return; }
+    const hits=DAYS.map(d=>{
+      const items=d.i.filter(it=>
+        (it.x+" "+(it.n||"")+" "+(it.t||"")).toLowerCase().includes(q));
+      const dayMatch=(d.d+" "+d.r+" "+d.t).toLowerCase().includes(q);
+      return (dayMatch||items.length)?{...d,i:dayMatch?d.i:items}:null;
+    }).filter(Boolean);
+    list.innerHTML=hits.length
+      ? `<div class="note" style="margin-bottom:9px">${hits.length} day${hits.length===1?"":"s"} match</div>`
+        +hits.map(d=>dayHTML(d,true)).join("")
+      : '<div class="empty">Nothing found. Try a shorter word.</div>';
+    wireNotes(list);
+  });
+})();
+
+/* Today view */
+/* Today is recomputed whenever you come back to the app.
+   It is a home-screen app that will sit open overnight — computing the date
+   once at load would show yesterday's plan every morning. */
+function renderToday(){
+  const el=document.getElementById("s-now");
+  const now=new Date();
+  const start=new Date(2026,8,12), end=new Date(2026,9,6,23,59);
+  const pad=n=>String(n).padStart(2,"0");
+  const key=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+
+  /* Map each real date to a DAY LABEL, not an array index — indices shift
+     whenever a day is inserted, labels don't. */
+  const DATEMAP={
+    "2026-09-12":"Sat 12 Sep","2026-09-13":"Sun 13 Sep",
+    "2026-09-14":"Mon 14 – Wed 16 Sep","2026-09-15":"Mon 14 – Wed 16 Sep",
+    "2026-09-16":"Mon 14 – Wed 16 Sep","2026-09-17":"Thu 17 Sep",
+    "2026-09-18":"Fri 18 Sep","2026-09-19":"Sat 19 Sep",
+    "2026-09-20":"Sun 20 – Mon 21 Sep","2026-09-21":"Sun 20 – Mon 21 Sep",
+    "2026-09-22":"Tue 22 Sep","2026-09-23":"Wed 23 Sep","2026-09-24":"Thu 24 Sep",
+    "2026-09-25":"Fri 25 Sep","2026-09-26":"Sat 26 Sep","2026-09-27":"Sun 27 Sep",
+    "2026-09-28":"Mon 28 Sep","2026-09-29":"Tue 29 – Wed 30 Sep",
+    "2026-09-30":"Tue 29 – Wed 30 Sep","2026-10-01":"Thu 1 Oct","2026-10-02":"Fri 2 Oct",
+    "2026-10-03":"Sat 3 Oct","2026-10-04":"Sun 4 Oct","2026-10-05":"Mon 5 Oct",
+    "2026-10-06":"Mon 5 Oct"
+  };
+
+  let idx=-1, banner="";
+  if(now<start){
+    const days=Math.ceil((start-now)/864e5);
+    banner=`<div class="card"><div class="k">Countdown</div>
+      <div class="big">${days} day${days===1?"":"s"} to go</div>
+      <div class="note">Trip starts Saturday 12 September 2026.</div></div>`;
+    idx=0;
+  } else if(now>end){
+    banner=`<div class="card"><div class="big">Trip complete 🎉</div>
+      <div class="note">Hope it was a good one. Everything's still here if you want to look back.</div></div>`;
+  } else {
+    const label=DATEMAP[key(now)];
+    idx=label?DAYS.findIndex(d=>d.d===label):-1;
+    banner=idx>=0
+      ? `<div class="card"><div class="k">Today</div><div class="big">${esc(DAYS[idx].r)}</div></div>`
+      : `<div class="card"><div class="k">Today</div><div class="big">Travel day</div>
+         <div class="note">No specific plan for today — check All days.</div></div>`;
+  }
+
+  const upcoming=idx>=0?DAYS.slice(idx+1,idx+3):[];
+  el.innerHTML=banner
+    +(idx>=0?dayHTML(DAYS[idx],true):"")
+    +(upcoming.length?`<div class="card"><h3>Next up</h3>${upcoming.map(d=>
+      `<div class="item"><span class="when">${esc(d.r)}</span><b>${esc(d.d)}</b>
+       <div class="note">${esc(d.t)}</div></div>`).join("")}</div>`:"");
+  wireNotes(el);
+}
+renderToday();
+/* refresh when the app is brought back to the foreground, and on the hour */
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) renderToday(); });
+setInterval(renderToday,3600000);
+
+document.getElementById("s-info").innerHTML=INFO.map(c=>
+  `<div class="card"><h3>${c.h}</h3><div class="note" style="color:var(--text)">${c.b}</div></div>`).join("");
+
+/* ---------- CHECKLIST + TOOLS DATA ---------- */
+const CHECK={
+ "Before you fly — urgent":[
+  "Apply for the UK visa AND pay the £500 Priority upgrade",
+  "Book a VFS biometrics slot — target 21 Aug, hard limit 28 Aug",
+  "Fix the Emirates seats — 45A/45C and 45K/45H are not adjacent",
+  "Pick Delta DL324 seats (PNR [PNR]) — currently unassigned, your wife and daughter must be together",
+  "Book the office hotel for 12–19 Sep (NOT 19–26)"],
+ "Book this week":[
+  "Flights Seattle→Buffalo, 22 Sep — daytime, not the redeye",
+  "Flights Buffalo→Newark, 24 Sep — not United Basic Economy",
+  "Comfort Inn The Pointe, Niagara, 2 nights 22–24 Sep",
+  "Courtyard Jersey City, 3 nights 24–27 Sep",
+  "Statue of Liberty ferry — ⚠️ book the hotel FIRST, then match the departure point",
+  "9/11 Museum timed entry"],
+ "Ask people":[
+  "Brother: harness car seat? spare 17–27 Sep? in date?",
+  "Friend: can they also drive you BACK to SEA on Tue 22 Sep?",
+  "Niagara hotel: phone +1 716 402 5350, note a ~23:00 arrival"],
+ "Before you leave home":[
+  "Travel insurance for all three",
+  "US eSIM — check the handset is unlocked and eSIM-capable",
+  "Consent letter for your wife travelling with your daughter",
+  "Scan passports, visas, tickets, insurance — email to yourself",
+  "Tell your bank you're travelling",
+  "Read the BA e-ticket for the exact baggage allowance"],
+ "Packing — the ones people forget":[
+  "Universal adapter — US is Type A/B, 110V",
+  "Shoes you don't mind ruining (Cave of the Winds gives no sandals)",
+  "Waterproof jacket — Seattle and Niagara",
+  "Warm layers for the White Mountains — colder than Boston",
+  "Genuinely comfortable walking shoes — New York is a lot of walking",
+  "Medicines in original packaging + prescriptions",
+  "Snacks for the two late arrivals — 17 and 22 Sep, nothing is open at 23:30",
+  "Power bank",
+  "Car seat (borrowed in Boston, carried from 17 Sep)"]
+};
+const TIPS=[
+ ["Restaurant, sit-down","18–20%"],["Taxi / Uber","15–18%"],
+ ["Hotel housekeeping","$3–5 per night"],["Porter / bellhop","$2 per bag"],
+ ["Counter service, coffee","Nothing expected — 'no tip' is fine"],
+ ["Retail shops","Never"]];
+
+/* ---------- MONEY ---------- */
+(function(){
+  const KEY="tripskip2";
+  const skip=store.get(KEY,{});
+  const m=n=>"$"+Math.round(n).toLocaleString("en-US");
+  const inr=n=>"₹"+Math.round(n*88/1000)+"k";
+  const el=document.getElementById("s-cost");
+
+  /* Key each skippable line by its CONTENT, not its position.
+     Positional keys silently reattach to a different line whenever the cost
+     data is edited — which would corrupt the total without any visible sign. */
+  const kOf=(si,ii)=>(COSTS.seg[si].n+"|"+COSTS.seg[si].i[ii][0])
+    .toLowerCase().replace(/[^a-z0-9]+/g,"-").slice(0,80);
+
+  const cost=(si,ii)=>skip[kOf(si,ii)]?0:COSTS.seg[si].i[ii][1];
+  const segTotal=si=>COSTS.seg[si].i.reduce((a,_,ii)=>a+cost(si,ii),0);
+  const personal=()=>COSTS.seg.reduce((a,s,si)=>a+(s.p?segTotal(si):0),0);
+  const officeNow=()=>COSTS.seg.reduce((a,s,si)=>a+(s.p?0:segTotal(si)),0);
+
+  function draw(){
+    const wasOpen=new Set();
+    el.querySelectorAll("details.day").forEach((d,i)=>{ if(d.open) wasOpen.add(i); });
+    const p=personal(), off=officeNow(), spare=COSTS.officeBudget-off;
+    const saved=COSTS.total-p;
+    const warn=COSTS.seg.some((s,si)=>
+      s.i.some((it,ii)=>it[2]==="visa"&&skip[kOf(si,ii)]));
+
+    let h=`<div class="card">
+      <div class="k">What you actually pay</div>
+      <div class="big">${m(p)} <span class="k" style="font-weight:400">≈ ${inr(p)}</span></div>
+      ${saved>0?`<div class="note good">You've skipped ${m(saved)} of the original ${m(COSTS.total)}.</div>`
+                :`<div class="note">${esc(COSTS.note)}</div>`}
+      <div class="note" style="margin-top:6px">Untick any line below to take it out of the total.</div>
+    </div>`;
+
+    if(warn) h+=`<div class="card" style="border-color:var(--bad)">
+      <h3 class="bad">⚠️ You've unticked the UK visa</h3>
+      <div class="note" style="color:var(--text)">This isn't a cost you can choose to avoid.
+      Britain scrapped transit-without-visa in Feb 2026, and it covered <b>airside</b> transit —
+      so waiting in a lounge doesn't get around it. British Airways would refuse to board you
+      <b>in Hyderabad</b>.<br><br>
+      The cheaper legitimate route is a <b>Direct Airside Transit Visa, £41.50 each way (£83)</b>
+      instead of the £135 Standard Visitor visa — but priority processing is rarely offered for it,
+      and standard processing returns a decision after your flight has gone.</div></div>`;
+
+    h+=`<div class="card">
+      <h3>💼 Your office week</h3>
+      <div class="note" style="color:var(--text)">
+        Budget <b>${m(COSTS.officeBudget)}</b> for 12–19 Sep · spend <b>${m(off)}</b><br>
+        <span class="${spare>=0?'good':'bad'}">${spare>=0?m(spare)+" to spare":m(-spare)+" over"}</span>
+      </div>
+      <div class="note">⚠️ Check it also covers the family's food on 17–18 Sep — if not, add about $110.</div>
+    </div>`;
+
+    const maxSeg=Math.max(...COSTS.seg.map((_,si)=>segTotal(si)),1);
+    h+=`<div class="card"><h3>Where it goes</h3>`;
+    COSTS.seg.forEach((s,si)=>{
+      const v=segTotal(si); if(!v) return;
+      h+=`<div class="item"><b>${esc(s.n)}</b><span style="float:right" class="dist">${m(v)}</span>
+        <div style="background:var(--card2);border-radius:4px;height:6px;margin-top:6px">
+        <div style="background:var(--accent);height:6px;border-radius:4px;width:${Math.round(v/maxSeg*100)}%"></div>
+        </div></div>`;
+    });
+    h+=`</div><h3 style="margin:18px 0 8px;font-size:15px">Tap any line to skip it</h3>`;
+
+    COSTS.seg.forEach((s,si)=>{
+      const items=s.i.map((it,ii)=>{
+        const off=!!skip[kOf(si,ii)];
+        return `<label class="chk money${off?" on":""}" data-k="${esc(kOf(si,ii))}">
+          <input type="checkbox" ${off?"":"checked"}>
+          <span>${esc(it[0])}</span>
+          <b class="${it[1]===0?'good':''}" style="margin-left:auto;white-space:nowrap">
+            ${it[1]===0?'free':m(it[1])}</b></label>`;
+      }).join("");
+      h+=`<details class="day"><summary>
+        <span><span class="when">${esc(s.w)}</span>${esc(s.n)}</span>
+        <span class="dist">${m(segTotal(si))}</span></summary>
+        <div class="body">${items}</div></details>`;
+    });
+
+    h+=`<div class="card"><h3>Levers you haven't pulled yet</h3>`;
+    COSTS.lever.forEach(([n,v])=>{
+      const done=String(v).includes("already");
+      h+=`<div class="item"><b>${esc(n)}</b>
+        <span style="float:right" class="${done?'good':'dist'}">${typeof v==="number"?m(v):esc("$"+v)}</span></div>`;
+    });
+    h+=`</div>
+    <div class="card"><h3>Already paid</h3>
+      <div class="note" style="color:var(--text)">Family Emirates return — ₹1,89,394<br>
+      Emirates seat selection — ₹10,624<br>Your British Airways return — not supplied</div></div>
+    <div class="card"><button id="resetSkip" style="width:100%;padding:11px;border:1px solid var(--line);
+      border-radius:9px;background:var(--card2);color:var(--dim);font-size:14px">Put everything back</button>
+      <div class="note" style="margin-top:8px">Hotels and flights are verified where possible; food and
+      local transport are estimates. Converted at about ₹88 to the dollar.</div></div>`;
+
+    el.innerHTML=h;
+    el.querySelectorAll("details.day").forEach((d,i)=>{ if(wasOpen.has(i)) d.open=true; });
+    if(window.__spendRedraw) window.__spendRedraw();
+    el.querySelectorAll("label.money").forEach(l=>{
+      l.onclick=e=>{
+        if(e.target.tagName!=="INPUT") e.preventDefault();
+        const k=l.dataset.k; skip[k]=!skip[k];
+        store.set(KEY,skip); draw();
+      };
+    });
+    const r=el.querySelector("#resetSkip");
+    if(r) r.onclick=()=>{
+      if(!confirm("Put every skipped line back into the total?")) return;
+      Object.keys(skip).forEach(k=>delete skip[k]);
+      store.set(KEY,skip); draw(); };
+  }
+  draw();
+})();
+
+/* ---------- CHECKLIST ---------- */
+(function(){
+  const KEY="tripcheck";
+  const state=store.get(KEY,{});
+  const el=document.getElementById("s-check");
+
+  function draw(){
+    let done=0,total=0;
+    let h="";
+    Object.entries(CHECK).forEach(([group,items])=>{
+      let gh="";
+      items.forEach(t=>{
+        const id=group+"|"+t; total++;
+        const on=!!state[id]; if(on)done++;
+        gh+=`<label class="chk${on?" on":""}" data-id="${esc(id)}">
+          <input type="checkbox" ${on?"checked":""}><span>${esc(t)}</span></label>`;
+      });
+      h+=`<div class="card"><h3>${esc(group)}</h3>${gh}</div>`;
+    });
+    const pct=total?Math.round(done/total*100):0;
+    el.innerHTML=`<div class="card"><div class="k">Progress</div>
+      <div class="big">${done} of ${total} done</div>
+      <div style="background:var(--card2);border-radius:5px;height:9px;margin-top:9px">
+      <div style="background:var(--good);height:9px;border-radius:5px;width:${pct}%"></div></div>
+      <div class="note" style="margin-top:8px">Ticks are saved on this device.</div></div>`+h+
+      `<div class="card"><button id="resetChk" style="width:100%;padding:11px;border:1px solid var(--line);
+        border-radius:9px;background:var(--card2);color:var(--dim);font-size:14px">Clear all ticks</button></div>`;
+
+    el.querySelectorAll("label.chk").forEach(l=>{
+      l.onclick=e=>{
+        if(e.target.tagName!=="INPUT") e.preventDefault();
+        const id=l.dataset.id;
+        state[id]=!state[id];
+        if(!store.set(KEY,state)){
+          alert("Couldn't save that tick — your browser is blocking storage. Private browsing does this.");
+        }
+        draw();
+      };
+    });
+    const r=el.querySelector("#resetChk");
+    if(r) r.onclick=()=>{
+      if(!confirm("Clear every tick on this list? This cannot be undone.")) return;
+      Object.keys(state).forEach(k=>delete state[k]);
+      store.set(KEY,state); draw(); };
+  }
+  draw();
+})();
+
+/* ---------- TOOLS ---------- */
+(function(){
+  const el=document.getElementById("s-tools");
+  el.innerHTML=`
+  <div class="card"><h3>💾 Your notes, ticks and spending</h3>
+    <div class="note" style="color:var(--text)">Everything you type is saved <b>in this browser on
+    this device only</b> — there's no account and no server, which is why it works offline.<br><br>
+    ⚠️ <b>It will not survive incognito/private browsing.</b> That mode throws away all storage when
+    you close the window, so notes vanish. Use a normal tab, or the home-screen app.<br><br>
+    It also won't appear on your wife's phone or your laptop. Use export below to move it.</div>
+    <button id="expBtn" style="width:100%;margin-top:10px;padding:12px;border:0;border-radius:9px;
+      background:var(--accent);color:#08131f;font-weight:800;font-size:15px">Export everything</button>
+    <button id="impBtn" style="width:100%;margin-top:8px;padding:11px;border:1px solid var(--line);
+      border-radius:9px;background:var(--card2);color:var(--dim);font-size:14px">Import from a backup</button>
+    <textarea id="expOut" style="width:100%;margin-top:10px;min-height:90px;padding:10px;
+      border-radius:9px;border:1px solid var(--line);background:var(--card2);color:var(--text);
+      font-size:12.5px;font-family:monospace;display:none"></textarea>
+    <div id="expMsg" class="note" style="margin-top:8px"></div>
+  </div>
+
+  <div class="card"><h3>💵 Tip calculator</h3>
+    <div class="note">US tipping is not optional in sit-down restaurants. Type the bill:</div>
+    <input id="bill" type="number" inputmode="decimal" placeholder="Bill in $"
+      style="width:100%;margin-top:9px;padding:12px;font-size:17px;border-radius:9px;
+      border:1px solid var(--line);background:var(--card2);color:var(--text)">
+    <div id="tipout" class="note" style="margin-top:10px;color:var(--text)"></div>
+  </div>
+
+  <div class="card"><h3>Who to tip, and how much</h3>
+    ${TIPS.map(([a,b])=>`<div class="item"><b>${esc(a)}</b>
+      <span style="float:right" class="dist">${esc(b)}</span></div>`).join("")}
+    <div class="note" style="margin-top:8px">Sales tax is added at the till, so the shelf price is never
+    what you pay. Always choose to be charged in <b>USD</b>, never rupees.</div>
+  </div>
+
+  <div class="card"><h3>💱 Dollars and rupees</h3>
+    <input id="usd" type="number" inputmode="decimal" placeholder="Amount in $"
+      style="width:100%;padding:12px;font-size:17px;border-radius:9px;
+      border:1px solid var(--line);background:var(--card2);color:var(--text)">
+    <div id="fxout" class="note" style="margin-top:10px;color:var(--text)"></div>
+    <div class="note" style="margin-top:8px">Rate <input id="rate" type="number" value="88"
+      style="width:62px;padding:3px 7px;border-radius:6px;border:1px solid var(--line);
+      background:var(--card2);color:var(--text)"> ₹ per $ — change it if the rate moves.</div>
+  </div>
+
+  <div class="card"><h3>🕐 Clocks</h3><div id="clocks" class="note" style="color:var(--text)"></div>
+    <div class="note" style="margin-top:8px">India is 12.5h ahead of Seattle and 9.5h ahead of the
+    east coast. Best time to call home from the US is late evening your time.</div>
+  </div>
+
+  <div class="card"><h3>📏 Quick conversions</h3>
+    <div class="item"><b>1 mile</b><span style="float:right">1.6 km</span></div>
+    <div class="item"><b>1 foot</b><span style="float:right">30 cm</span></div>
+    <div class="item"><b>1 lb</b><span style="float:right">0.45 kg</span></div>
+    <div class="item"><b>1 gallon</b><span style="float:right">3.8 litres</span></div>
+    <div class="item"><b>70°F</b><span style="float:right">21°C — pleasant</span></div>
+    <div class="item"><b>50°F</b><span style="float:right">10°C — jacket</span></div>
+    <div class="note" style="margin-top:8px">Rough °F → °C: subtract 30, halve it.</div>
+  </div>`;
+
+  /* export / import — so nothing is trapped in one browser.
+     Each key needs its correct shape: the storage guard rejects an array when
+     the fallback isn't one, which silently dropped the spend log. */
+  const KEYS={tripnotes:{},tripcheck:{},tripskip2:{},tripspend:[]};
+  const expBtn=document.getElementById("expBtn"), impBtn=document.getElementById("impBtn"),
+        expOut=document.getElementById("expOut"), expMsg=document.getElementById("expMsg");
+  if(expBtn){
+    expBtn.onclick=()=>{
+      const bundle={v:1,saved:new Date().toISOString()};
+      Object.keys(KEYS).forEach(k=>{
+        const val=store.get(k,KEYS[k]);
+        const empty=Array.isArray(val)?!val.length:!Object.keys(val).length;
+        if(!empty) bundle[k]=val;
+      });
+      const text=JSON.stringify(bundle);
+      expOut.style.display="block";
+      expOut.value=text;
+      expOut.select();
+      let copied=false;
+      try{ copied=document.execCommand&&document.execCommand("copy"); }catch(e){}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(()=>{
+          expMsg.innerHTML='<span class="good">Copied. Paste it into an email or a note to yourself.</span>';
+        }).catch(()=>{
+          expMsg.innerHTML=copied?'<span class="good">Copied.</span>'
+            :'Select the text above and copy it manually.';
+        });
+      } else {
+        expMsg.innerHTML=copied?'<span class="good">Copied.</span>'
+          :'Select the text above and copy it manually.';
+      }
+    };
+    impBtn.onclick=()=>{
+      expOut.style.display="block";
+      if(!expOut.value.trim()){
+        expOut.value=""; expOut.focus();
+        expMsg.innerHTML='Paste your backup into the box above, then tap Import again.';
+        return;
+      }
+      try{
+        const b=JSON.parse(expOut.value);
+        if(!b||typeof b!=="object") throw 0;
+        let n=0;
+        Object.keys(KEYS).forEach(k=>{ if(b[k]!==undefined && store.set(k,b[k])) n++; });
+        expMsg.innerHTML=n?'<span class="good">Imported '+n+' section'+(n===1?"":"s")+
+          '. Reopen the app to see it.</span>':'<span class="bad">Nothing to import.</span>';
+      }catch(e){
+        expMsg.innerHTML='<span class="bad">That doesn\'t look like a backup. Paste the whole line, including the braces.</span>';
+      }
+    };
+  }
+
+  const bill=document.getElementById("bill"), tipout=document.getElementById("tipout");  bill.addEventListener("input",()=>{
+    const b=parseFloat(bill.value);
+    if(!b||b<=0){ tipout.innerHTML=""; return; }
+    tipout.innerHTML=[15,18,20].map(p=>
+      `<div class="item"><b>${p}%</b> — tip $${(b*p/100).toFixed(2)}
+       <span style="float:right" class="dist">total $${(b*(1+p/100)).toFixed(2)}</span></div>`).join("");
+  });
+
+  const usd=document.getElementById("usd"), rate=document.getElementById("rate"),
+        fxout=document.getElementById("fxout");
+  const fx=()=>{
+    const v=parseFloat(usd.value), r=parseFloat(rate.value)||88;
+    fxout.innerHTML = (!v||v<=0) ? "" :
+      `<div class="big">₹${Math.round(v*r).toLocaleString("en-IN")}</div>`;
+  };
+  usd.addEventListener("input",fx); rate.addEventListener("input",fx);
+
+  const zones=[["🇮🇳 India","Asia/Kolkata"],["Seattle","America/Los_Angeles"],
+               ["New York / Boston","America/New_York"],["London","Europe/London"]];
+  const drawClocks=()=>{
+    document.getElementById("clocks").innerHTML=zones.map(([n,z])=>{
+      let t="—";
+      try{ t=new Date().toLocaleTimeString("en-GB",
+        {timeZone:z,hour:"2-digit",minute:"2-digit"}); }catch(e){}
+      return `<div class="item"><b>${esc(n)}</b><span style="float:right" class="dist">${t}</span></div>`;
+    }).join("");
+  };
+  drawClocks(); setInterval(drawClocks,30000);
+})();
+
+/* ---------- SPEND TRACKER ---------- */
+(function(){
+  const KEY="tripspend";
+  let log=store.get("tripspend",[]);
+  const host=document.createElement("div");
+  const cost=document.getElementById("s-cost");
+  cost.parentNode.insertBefore(host,cost);
+  host.id="spendHost";
+
+  const m=n=>"$"+Math.round(n).toLocaleString("en-US");
+
+  /* the planned figure must reflect anything unticked in the Money tab */
+  function plannedNow(){
+    const skip=store.get("tripskip2",{});
+    const kOf=(s,it)=>(s.n+"|"+it[0]).toLowerCase().replace(/[^a-z0-9]+/g,"-").slice(0,80);
+    return COSTS.seg.reduce((a,s)=>a+(s.p
+      ? s.i.reduce((x,it)=>x+(skip[kOf(s,it)]?0:it[1]),0) : 0),0);
+  }
+
+  function draw(){
+    const total=log.reduce((a,e)=>a+e.a,0);
+    const planned=plannedNow();
+    const pct=Math.min(100,Math.round(total/planned*100));
+    host.innerHTML=`<div class="card">
+      <div class="k">Spent so far</div>
+      <div class="big">${m(total)} <span class="k" style="font-weight:400">of ${m(planned)} planned</span></div>
+      <div style="background:var(--card2);border-radius:5px;height:9px;margin-top:9px">
+        <div style="background:${total>planned?'var(--bad)':'var(--good)'};height:9px;border-radius:5px;width:${pct}%"></div></div>
+      <div class="note" style="margin-top:8px">${total>planned
+        ? '<span class="bad">Over the plan by '+m(total-planned)+'</span>'
+        : m(planned-total)+' left'}</div>
+    </div>
+    <div class="card"><h3>Log a spend</h3>
+      <div style="display:flex;gap:7px">
+        <input id="spAmt" type="number" inputmode="decimal" placeholder="$"
+          style="width:96px;padding:11px;border-radius:9px;border:1px solid var(--line);
+          background:var(--card2);color:var(--text);font-size:16px">
+        <input id="spWhat" type="text" placeholder="What for?"
+          style="flex:1;padding:11px;border-radius:9px;border:1px solid var(--line);
+          background:var(--card2);color:var(--text);font-size:16px">
+      </div>
+      <button id="spAdd" style="width:100%;margin-top:8px;padding:12px;border:0;border-radius:9px;
+        background:var(--accent);color:#08131f;font-weight:800;font-size:15px">Add</button>
+    </div>`+
+    (log.length?`<div class="card"><h3>Recent</h3>${
+      log.slice().reverse().slice(0,25).map(e=>
+        `<div class="item"><b>${esc(e.w||"—")}</b>
+         <span style="float:right" class="dist">${m(e.a)}</span>
+         <div class="note">${esc(e.d)} · <span class="del" data-id="${esc(e.id)}"
+           style="color:var(--bad);cursor:pointer">remove</span></div></div>`).join("")}
+      </div>`:"");
+
+    const amt=host.querySelector("#spAmt"), what=host.querySelector("#spWhat"),
+          add=host.querySelector("#spAdd");
+    if(!amt||!what||!add) return;
+    add.onclick=()=>{
+      const a=parseFloat(amt.value);
+      if(!a||a<=0){ amt.focus(); return; }
+      log.push({id:Date.now(),a,w:what.value.trim(),
+        d:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short"})});
+      store.set(KEY,log); draw();
+    };
+    what.addEventListener("keydown",e=>{ if(e.key==="Enter") add.click(); });
+    host.querySelectorAll(".del").forEach(d=>{
+      d.onclick=()=>{
+        if(!confirm("Remove this entry?")) return;
+        log=log.filter(e=>String(e.id)!==d.dataset.id);
+        store.set(KEY,log); draw(); };
+    });
+  }
+  draw();
+  window.__spendRedraw=draw;
+  /* Tie visibility to the Money tab. The Near me button switches tabs without
+     going through a nav click, so watch the section itself rather than the
+     buttons — otherwise the tracker leaks onto Near me. */
+  const sync=()=>{ host.style.display=cost.classList.contains("on")?"block":"none"; };
+  sync();
+  if(window.MutationObserver){
+    new MutationObserver(sync).observe(cost,{attributes:true,attributeFilter:["class"]});
+  }
+  document.querySelectorAll("nav button").forEach(b=>{
+    const prev=b.onclick;
+    b.onclick=e=>{ if(prev) prev(e); setTimeout(sync,0); };
+  });
+})();
+
+/* ---------- OFFLINE ---------- */
+/* Registers a service worker when served over https (i.e. the hosted copy).
+   Silently does nothing when the file is opened locally — that's expected. */
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+
+/* ---------- NEAR ME ---------- */
+function haversine(a,b,c,d){
+  const R=6371,p=Math.PI/180;
+  const x=Math.sin((c-a)*p/2)**2+Math.cos(a*p)*Math.cos(c*p)*Math.sin((d-b)*p/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+const btn=document.getElementById("nearBtn");
+let lastPos=null, nearCat="All";
+
+function drawNear(){
+  const out=document.getElementById("s-near");
+  if(!lastPos){ return; }
+  const {la,lo}=lastPos;
+  const cats=["All",...[...new Set(PLACES.map(p=>p.c))].sort()];
+  const chips=cats.map(c=>`<button class="fchip${c===nearCat?" on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  const pool=PLACES.filter(p=>nearCat==="All"||p.c===nearCat)
+    .map(p=>({...p,km:haversine(la,lo,p.lat,p.lon)}))
+    .sort((x,y)=>x.km-y.km);
+  const near=pool.filter(p=>p.km<=60).slice(0,15);
+  const far=near.length?null:pool[0];
+
+  out.innerHTML=`<div class="card"><div class="k">Your location</div>
+    <div class="note">${la.toFixed(3)}, ${lo.toFixed(3)}</div></div>
+    <div class="chips">${chips}</div>`+
+    (near.length?near.map(p=>{
+      const d=p.km<1?`${Math.round(p.km*1000)} m`:`${p.km.toFixed(1)} km`;
+      return `<div class="card"><h3>${esc(p.n)}</h3>
+        <div class="k"><span class="pill">${esc(p.c)}</span><span class="dist">${d} away</span></div>
+        <div class="note">${esc(p.a)}${p.q?' <span class="warn">· confirm the exact address in Maps</span>':''}</div>
+        <a class="map" href="${mapURL(p)}" target="_blank" rel="noopener">Open in Maps ↗</a></div>`;
+    }).join("")
+    :`<div class="empty">Nothing from your plan is within 60 km.<br><br>
+       ${far?`The nearest is <b>${esc(far.n)}</b>, about ${Math.round(far.km)} km away — so you're
+       probably not in that part of the trip yet.`:"No places in this category."}</div>`);
+
+  out.querySelectorAll(".fchip").forEach(b=>{
+    b.onclick=()=>{ nearCat=b.dataset.c; drawNear(); window.scrollTo(0,0); };
+  });
+}
+
+btn.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll("section").forEach(x=>x.classList.remove("on"));
+  document.querySelector('nav button[data-t="s-near"]').classList.add("on");
+  const out=document.getElementById("s-near"); out.classList.add("on"); window.scrollTo(0,0);
+  if(!navigator.geolocation){
+    out.innerHTML='<div class="empty">This browser has no location support.</div>'; return;
+  }
+  out.innerHTML='<div class="empty">Getting your location…</div>';
+  btn.disabled=true; btn.textContent="Locating…";
+  navigator.geolocation.getCurrentPosition(pos=>{
+    btn.disabled=false; btn.textContent="📍 Near me";
+    lastPos={la:pos.coords.latitude,lo:pos.coords.longitude};
+    drawNear();
+  },err=>{
+    btn.disabled=false; btn.textContent="📍 Near me";
+    out.innerHTML=`<div class="empty">Couldn't get your location.<br><br>
+      <span class="warn">${esc(err.message)}</span><br><br>
+      Most likely you declined the permission. In Chrome tap the ⋮ menu, then Settings, Site settings, Location, and allow it for this page. Then tap Near me again.</div>`;
+  },{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+};
+</script>
+</body>
+</html>
+
+
+
+
+

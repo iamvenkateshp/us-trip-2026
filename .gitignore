@@ -1,0 +1,15 @@
+# Nothing but the published site belongs in this repo.
+#
+# The publish script lives OUTSIDE this folder, at
+#   C:\Users\vepasupu\trip-tools\update-site.ps1
+# because its redaction rules necessarily name every private string it strips —
+# booking references, street addresses, family names. Committing it here served
+# that list publicly and defeated the entire point of redacting index.html.
+#
+# Anything that knows a secret in order to hide it must never live in the repo
+# it publishes to.
+
+*.ps1
+*.md
+*.ics
+*.csv
