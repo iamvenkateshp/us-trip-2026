@@ -26,7 +26,7 @@
  * remembering to bump a number by hand.
  * ────────────────────────────────────────────────────────────────────────
  */
-const VERSION = "20260822-170726";
+const VERSION = "a23900811d4e";
 const CACHE = "trip-" + VERSION;
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
