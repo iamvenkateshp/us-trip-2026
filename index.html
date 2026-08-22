@@ -1282,11 +1282,55 @@ const TIPS=[
 
 /* ---------- OFFLINE ---------- */
 /* Registers a service worker when served over https (i.e. the hosted copy).
-   Silently does nothing when the file is opened locally — that's expected. */
+   Silently does nothing when the file is opened locally — that's expected.
+
+   The worker is cache-first so the app opens instantly and works with no
+   signal. The cost of that is you can be looking at a copy that's a publish
+   or two behind, with nothing to tell you so — which is exactly what went
+   wrong before. So: force an update check on every load, and when a newer
+   build activates, show a bar offering a reload. */
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    navigator.serviceWorker.register("sw.js").then(reg => {
+      // Ask the browser to re-fetch sw.js now rather than whenever it feels
+      // like it — without this, an update can sit unnoticed for up to a day.
+      reg.update().catch(() => {});
+      setInterval(() => reg.update().catch(() => {}), 60 * 60 * 1000);
+    }).catch(() => {});
+
+    navigator.serviceWorker.addEventListener("message", ev => {
+      if (!ev.data || ev.data.type !== "updated") return;
+      showUpdateBar();
+    });
   });
+}
+
+function showUpdateBar(){
+  if (document.getElementById("updbar")) return;
+  const bar = document.createElement("div");
+  bar.id = "updbar";
+  bar.style.cssText =
+    "position:fixed;left:12px;right:12px;bottom:calc(var(--navh,64px) + 12px);z-index:9999;" +
+    "background:var(--accent,#3b82f6);color:#fff;border-radius:11px;padding:12px 14px;" +
+    "display:flex;align-items:center;gap:10px;font-size:14px;" +
+    "box-shadow:0 8px 24px rgba(0,0,0,.35)";
+  const txt = document.createElement("div");
+  txt.style.cssText = "flex:1;line-height:1.35";
+  txt.innerHTML = "<b>Itinerary updated</b><br><span style='opacity:.85'>You're looking at an older copy.</span>";
+  const btn = document.createElement("button");
+  btn.textContent = "Reload";
+  btn.style.cssText =
+    "flex:none;background:#fff;color:#1e40af;border:0;border-radius:8px;" +
+    "padding:9px 14px;font-size:14px;font-weight:600";
+  btn.onclick = () => location.reload();
+  const dis = document.createElement("button");
+  dis.textContent = "✕";
+  dis.setAttribute("aria-label","Dismiss");
+  dis.style.cssText =
+    "flex:none;background:transparent;color:#fff;border:0;font-size:16px;padding:6px 4px;opacity:.8";
+  dis.onclick = () => bar.remove();
+  bar.appendChild(txt); bar.appendChild(btn); bar.appendChild(dis);
+  document.body.appendChild(bar);
 }
 
 /* ---------- NEAR ME ---------- */
